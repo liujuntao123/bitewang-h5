@@ -6,6 +6,7 @@ import BaList from './views/BaList'
 import PreReg from './views/PreReg'
 import Reg from './views/Reg'
 import Login from './views/Login'
+import PostsList from './views/PostsList'
 
 Vue.use(Router)
 
@@ -41,5 +42,10 @@ export default new Router({
       name:'login',
       component:Login
     },
+    {
+      path: '/postslist',
+      name: 'postslist',
+      component: PostsList
+    }
   ]
 })
