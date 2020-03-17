@@ -1,0 +1,382 @@
+<template>
+<div>
+  <!-- <div @click="handleJumpSearch" v-if="!isOnSearch" class="mask">
+      <img class="search_black" src="../images/search_black.png" alt="" srcset=""/>
+      输入关键字搜索
+    </div> -->
+  <div class="item-container" @click="tapAll" >
+    <div class="item dropzone" v-for="(item, index) in all_list" 
+    :key="index" 
+    :draggable="draggable" 
+    @touchstart="gtouchstart"
+    @touchmove="gtouchmove"
+    @touchend="gtouchend(item)"
+    @dragenter="dragEnter(index,$event)" 
+    @dragstart="dragStart(index,$event)"
+    @dragover="dragOver(index,$event)"
+    @dragleave="dragLeave(index,$event)"
+    @dragend="dragEnd(index,$event)">
+     <span
+            @touchstart="handleDelete(index)"
+            class="delete-btn"
+            v-if="canDelete"
+          >×
+          </span>
+          <div :draggable="false"  class="image-box">
+            <img :draggable="false"  class="image" :src="item.iconUrl" alt="">
+          </div>
+          <p :draggable="false" class="text-box">{{item.name}}</p>
+     </div>
+  <div class="blank-box" v-for="n in blankListLength" :key="n+'b'"></div>
+  </div>
+</div>
+</template>
+
+<script>
+// @dragenter="dragEnter(index,$event)" 
+import dragpolyfill from '../lib/draggable-polyfill';
+import api from '@/api'
+import config from '@/config'
+import data from '@/utils/onlineconfig'
+const { getOnlineConfig, findBlacklist } = data
+const { expire_time } = config
+
+export default {
+  data(){
+    return {
+      all_list:[],
+      currentIndex:0,
+      startIndex:0,
+      draggable:false,
+      canDelete: false,
+      blankListLength:0,
+      hasMoved:false
+    }
+  },
+  mounted() {
+    // this.draggable = true;
+    this.getMarginWith()
+    document.title = '比特汪'
+
+    getOnlineConfig.call(this).then(onlineConfig => {
+      console.log('onlineConfig', onlineConfig)
+      this.blacklist = findBlacklist(onlineConfig)
+      console.log('blacklist', this.blacklist)
+      this.expire_time = onlineConfig.ba_list_refresh_seconds
+      this.getBaList().then(()=>{console.log('set blank list')
+        this.setBlankList()
+      })
+      // this.getSystemInfo()
+      //   .then(() => {
+      //     return this.getBaList()
+      //   })
+      //   .then(res => {
+      //     // this.all_list = res
+      //     // this.setBaList()
+      //     this.pending()
+      //   })
+    })
+  },
+  methods:{
+    setBlankList(){
+      this.blankListLength=4-this.all_list.length%4
+    },
+    getBaList() {
+      // 从storage里面取，如果过期了，则重新拉
+      var timestamp = Date.parse(new Date())
+      var data_expiration = localStorage.getItem('data_expiration')
+      
+      if (data_expiration && data_expiration > timestamp) {
+        //如果有缓存，且缓存没有过期
+        let all_list = localStorage.getItem('baList')
+        // all_list = this.filterBlackList(all_list)
+        all_list=JSON.parse(all_list)
+        this.all_list = all_list
+        return Promise.resolve(all_list)
+      } else {
+        return api.getBaList().then(res => {console.log('res',res)
+          // let all_list = res.baList.sort((a, b) => b.level - a.level)
+          let all_list = localStorage.getItem('baList')
+          all_list=JSON.parse(all_list)
+          console.log('all_list>>>>>',all_list)
+          let hasStorage = !!all_list
+          all_list = all_list || []
+          // console.log('all_list',all_list)
+          let new_list = res.baList
+          // 等级为10且原先没有的吧，则加到最前面
+          if (hasStorage) {
+            new_list = new_list.filter(
+              item => item.level >= 10 && !all_list.some(it => it.id == item.id)
+            )
+          }
+          all_list = [...new_list, ...all_list]
+          console.log('all_list', all_list)
+          console.log('blacklist', this.blacklist)
+          this.all_list = all_list
+          this.setBaList()
+          // this.all_list = this.filterBlackList(this.all_list)
+          return this.all_list
+        })
+      }
+    },
+    filterBlackList(list) {
+      return list.filter(
+        item => this.blacklist.indexOf(item.category) == -1 || item.from_search
+      )
+    },
+    setBaList() {
+      var timestamp = Date.parse(new Date())
+      var expiration = timestamp + this.expire_time * 1000
+      localStorage.setItem('baList', JSON.stringify(this.all_list))
+      localStorage.setItem('data_expiration', expiration)
+    },
+    tapAll(e) {
+      // console.log('>>>>>>>')
+      // alert('>>>>>>')
+        this.draggable = false
+        this.canDelete = false
+        e.preventDefault()
+    },
+    handleTapItem(item) {
+      // if (this.currentDelete != -1) {
+      //   return
+      // }
+      // alert('>>>>>>>')
+      if (this.canDelete) {
+        return
+      }
+      wx.navigateTo({ url: 'info?id=' + item.id + '&ba_name=' + item.name })
+    },
+    handleDelete(index) {
+      console.log('handle delete.....', index)
+      // let index = e.currentTarget.dataset.index
+      this.all_list.splice(index, 1)
+      this.setBlankList()
+      if (this.all_list.length == 1) {
+        this.canDelete = false
+      }
+      // this.pending()
+      this.setBaList()
+      // this.currentDelete = -1
+    },
+    gtouchstart (e) {
+      // alert('touch start')
+      console.log('on tap')
+      // 开始触摸
+      this.timeOutEvent = setTimeout(() => {
+        // 长按1秒
+        this.timeOutEvent = 0
+        this.longTap()
+      }, 1000)
+      e.preventDefault();
+      
+    },
+    gtouchmove (e) {
+      // console.log('moved>>>>>>>')
+      // alert('touch move')
+      // 看具体需求
+      // clearTimeout(this.timeOutEvent)
+      // this.timeOutEvent = 0
+      // this.hasMoved=true
+      e.preventDefault();
+    },
+    gtouchend (item) {
+      alert('touch end')
+      clearTimeout(this.timeOutEvent)
+      this.timeOutEvent = 0
+      if(!this.draggable&&!this.hasMoved){
+        this.hasMoved=false
+        wx.miniProgram.navigateTo({ url: 'info?id=' + item.id + '&ba_name=' + item.name })
+      }
+      
+    },
+    reset(){
+      // 每次单元进到一个新的区域，要重置之前的状态
+      if(this.currentTarget){
+        this.startTarget.classList.remove('on-over')
+      this.currentTarget.classList.remove('on-enter')
+      }
+    },
+    longTap(){
+      // alert('long tap')
+      console.log('long tap')
+      this.draggable=true
+      this.canDelete=true
+      // this.$nextTick(()=>{
+      //   console.log('>>>>')
+      //   // dragpolyfill()
+      // })
+    },
+    dragStart(index,e){
+      console.log('start',e)
+      // if(e.target.className =='image'){
+      //   return
+      // }
+      this.currentIndex=this.startIndex=index
+      // e.target.style.visibility ='hidden'
+      // e.target.style.opacity = 0.1;
+      this.startTarget=e.target
+      e.target.classList.add('on-drag')
+      e.stopPropagation()
+      // e.preventDefault();
+
+    },
+    onDrag(index,e){
+      // console.log('>>>>>>',index)
+    },
+    dragEnter(index,e) {
+      // console.log('enter>>>>>',e.target)
+      if(index==this.currentIndex){
+        return
+      }
+      if(e.target==this.currentTarget){
+        return
+      }
+      let _target
+      if(['image-box','text-box'].indexOf(e.target.className)>-1){
+        _target = e.target.parentNode
+      }
+      if(['image'].indexOf(e.target.className)>-1){
+        _target=e.target.parentNode.parentNode
+      }
+      console.log('classNames:   ',e.target.className)
+      if(e.target.className.indexOf('item')>-1){
+        _target=e.target
+      }
+      // console.log('enter',index,this.currentIndex,e.target,_target)
+      console.log('enter',index,this.currentIndex,_target)
+      this.reset()
+        _target.classList.add('on-enter')
+        this.currentTarget=_target
+        // 如果不是在起始位置，则隐藏当前位置的元素
+      if(index!= this.startIndex){
+        this.startTarget.classList.add('on-over')
+      }
+      e.stopPropagation()
+      // 互换位置
+      // if(index!=this.currentIndex){
+        let _index=index
+        let _list=[...this.all_list]
+        let _item=_list[index]
+        _list[index]=_list[this.currentIndex]
+        _list[this.currentIndex]=_item
+        this.all_list = [..._list]
+        this.currentIndex = _index
+      // }
+      // e.preventDefault();
+    },
+    dragEnd(index,e){
+      console.log('dragend')
+      this.startTarget.classList.remove('on-drag')
+      this.reset()
+      console.log(this.all_list)
+      e.preventDefault();
+    },
+    getMarginWith(){
+      let width=document.documentElement.clientWidth
+      let marginWidth=(width-4*80)/5
+      console.log('marginWidth',marginWidth)
+    },
+    // dragOver(e){console.log('over>>>>>>')
+    //   e.preventDefault();
+    // },
+    // dragLeave() {
+    //   e.preventDefault();
+    //   console.log('dragleave>>>>>>>>')
+    // }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+
+.item-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: flex-start;
+  height: 100vh;
+  position: relative;
+  background: #dddddd;
+}
+.on-enter{
+  opacity: 0;
+}
+
+.tip {
+  color: #aaa;
+  font-size: 12px;
+}
+.normal_title {
+  font-size: 16px;
+  margin: 5px 10px;
+  font-weight: bold;
+}
+
+.blank-box{
+  @box-size:floor((100vw-10)/4);
+  // width: 80px;
+  // height: 80px;
+  width: @box-size;
+  height: @box-size;
+  margin-top: 10px;
+}
+.dnd-poly-drag-image{
+ .item{
+  //  visibility: visible;
+  //  background: red;
+ }
+}
+.dnd-poly-drag-image {
+    opacity: 1 !important;
+}
+
+
+.item {
+  @box-size:floor((100vw-10)/4);
+  // position: absolute;
+  // border: 1px solid #888888;
+  position: relative;
+  // margin-right: 10px;
+  margin-top: 10px;
+  box-shadow: 0px 0px 2px #888888;
+  font-size: 12px;
+  // width: 80px;
+  // height: 80px;
+  width: @box-size;
+  height: @box-size;
+  text-align: center;
+  box-sizing: border-box;
+  background: #ffffff;
+  /* border-radius:90px; */
+  &.on-drag{
+  opacity: 0;
+  &.on-over{
+    opacity: 1;
+  }
+}
+  .image-box {
+    padding: 10px;
+    padding-bottom: 2.5px;
+    .image {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .text-box {
+  }
+}
+
+.delete-btn {
+  position: absolute;
+  display: block;
+  right: -10px;
+  top: -10px;
+  background: #fff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+}
+</style>
