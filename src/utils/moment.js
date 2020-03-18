@@ -53,4 +53,17 @@ export default class Moment {
           }
       })
   }
+
+  showTime(nowTime) {
+      const offset = (nowTime.getTime() - this.date.getTime()) / 1000
+      if(offset < 60) {
+          return "刚刚"
+      } else if (offset >= 60 && offset < 60 * 60) {
+          return parseInt(offset / 60) + "分钟前"
+      } else if (offset >= 60 * 60 && offset < 24 * 60 * 60) {
+          return parseInt(offset / (60 * 60)) + "小时前"
+      } else {
+          return this.format('YYYY-MM-DD')
+      }
+  }
 }

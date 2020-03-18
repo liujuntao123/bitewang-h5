@@ -1,12 +1,16 @@
 <template>
-  <div>
-    <Header
-      :is-show-back="true"
+  <div class="post-list-page">
+    <Header 
+      class="header-style" 
+      :is-show-back="true" 
       @handleBack="headHandleBack"
       :title="headName"
     />
-    <div class="post-list-page">
-      {{ text }}
+    <div class="post-list-container">
+      <PostsItem />
+    </div>
+    <div class="click-post-container">
+      <img class="new-post-img" src="./../images/new_post.png" alt="">
     </div>
   </div>
 </template>
@@ -14,16 +18,17 @@
 <script>
 import api from '@/api'
 import Header from './../components/header'
+import PostsItem from './../components/postsitem'
 
 export default {
   data() {
     return {
       headName: '比特币BTC',
-      text: 'jjjjjjjjjjjjj'
     }
   },
   components: {
-    Header
+    Header,
+    PostsItem
   },
   methods: {
     headHandleBack(){
@@ -34,9 +39,23 @@ export default {
 
 <style lang="less" scoped>
 .post-list-page {
-  width: 100%;
-  height: 100%;
   background-color: #e8e8e8;
+  height: 100vh;
+  position: relative;
+  .post-list-container {
+    height: 82vh;
+  }
+  .click-post-container {
+    position: absolute;
+    bottom: 0;
+    left: calc(50vw - 25px);
+    width: 50px;
+    height: 50px;
+    .new-post-img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 </style>
 
