@@ -108,7 +108,8 @@ export default {
       }
       api.preReg(obj).then(res=>{
         if(res.result==0){
-          Toast('注册成功')
+          // Toast('注册成功')
+          this.$router.push({name:'reg',params:{phone:this.phone.trim()}})
           }else {
             Toast('验证码错误')
         }

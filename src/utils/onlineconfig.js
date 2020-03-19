@@ -7,7 +7,8 @@ function getQueryVariable(str) {
   let obj = {}
   for (let item of arr) {
     let [key, value] = item.split('=')
-    obj[key] = JSON.parse(value)
+    // obj[key] = JSON.parse(value)
+    obj[key] = value
   }
   return obj
 }
@@ -20,7 +21,8 @@ export default class Data {
   static getOnlineConfig(){
     return api.getOnlineConfig().then(res => {
       let config = res.config
-      config=window.atob(config.slice(2))
+      // config=window.atob(config.slice(2))
+      // config=JSON.parse()
       config = decodeURIComponent(config)
       config = getQueryVariable(config)
       return config

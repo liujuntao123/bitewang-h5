@@ -17,10 +17,12 @@ import Posting from './views/posting'
 
 Vue.use(Router)
 
+console.log('router do')
+
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/balist',
       name: 'balist',
       component: BaList
     },

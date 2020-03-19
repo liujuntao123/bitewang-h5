@@ -50,7 +50,9 @@ export default {
         pwd:this.pwd
       }
       api.login(obj).then(res=>{
-        console.log('login success')
+        console.log('login success',res)
+        this.$store.dispatch('userInfo/setUserInfo',res)
+        window.location.href='/web#/balist'
       })
     }
   }

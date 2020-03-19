@@ -14,9 +14,13 @@ const Login='Login'
 const ResetPwd='ResetPwd'
 
 export default class api extends base {
-  static getBaList(keyword) {
-    const url = `${this.baseUrl}/${BaList}?keyword=${keyword||''}&d=wxapp`
-    return this.get(url)
+  // static getBaList(keyword) {
+  //   const url = `${this.baseUrl}/${BaList}?keyword=${keyword||''}&d=wxapp`
+  //   return this.get(url)
+  // }
+  static getBaList(data) {
+    const url = `${this.baseUrl}/${BaList}`
+    return this.post(url,data)
   }
   static getBaInfo(id) {
     const url = `${this.baseUrl}/${BaInfo}?id=${id||''}&d=${window.d}`
