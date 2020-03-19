@@ -50,7 +50,8 @@ export default {
         nickname:this.nickname.trim(),
         avatar:this.avatar
       }
-      api.reg(obj).then(res=>{
+      api.reg(obj).then(()=> {
+        // eslint-disable-next-line no-console
         console.log('reg success')
       })
     }

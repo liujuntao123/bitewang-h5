@@ -81,7 +81,7 @@
 
     methods: {
       handleBack(){
-        wx.miniProgram.navigateBack()
+        this.$router.go(-1);
       },
       handleSearch(){
 

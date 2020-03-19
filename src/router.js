@@ -10,6 +10,7 @@ import Mine from './views/mine'
 import MineInfo from './views/mineInfo'
 import MyTheme from './views/myTheme'
 import MyComment from './views/myComment'
+import PostsList from './views/PostsList'
 
 Vue.use(Router)
 
@@ -65,5 +66,9 @@ export default new Router({
       name:'myComment',
       component:MyComment
     },
+      path: '/postslist',
+      name: 'postslist',
+      component: PostsList
+    }
   ]
 })
