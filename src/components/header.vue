@@ -67,7 +67,9 @@
         this.$router.go(-1);
       },
       handleSearch(){
-
+      },
+      posting() {
+        this.$emit("submitPosting")
       }
     }
   };

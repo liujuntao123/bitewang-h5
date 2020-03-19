@@ -16,8 +16,8 @@
         <img class="post-is-top-img" src="./../images/top.png" v-show="item.isTop" alt="">
       </div>
       <div class="item-support-box">
-        <img class="item-support-img" v-if="!hasSupport" src="./../images/good1.png" alt="" >
-        <img class="item-support-img" v-else src="./../images/good2.png" alt="">
+        <img class="item-support-img" @click="supportGood" v-if="!hasSupport" src="./../images/good1.png" alt="" >
+        <img class="item-support-img" @click="noSupportGood" v-else src="./../images/good2.png" alt="">
         <div class="item-support-num">
           {{ item.goodCount }}
         </div>
@@ -25,7 +25,7 @@
     </div>
     <div class="item-main">
       <div class="item-content">
-        {{ item.content }}
+        {{ item.summary }}
       </div>
       <div class="item-comment-box" v-if="item.commentCount > 0">
         <div class="comment-less-box" v-if="item.commentCount <= 2">
@@ -65,36 +65,14 @@ import moment from '@/utils/moment'
 
 export default {
   props: {
+    item: {
+      type: Object,
+      default: {}
+    },
 
   },
   data() {
     return {
-      item: {
-        "tid": 111,
-        "createdAt": 1584436510000,
-        "uid": "0d5a188c-ab7f-4aae-b9e2-823266fa6106",
-        "nickname": "jack",
-        "avatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584546736064&di=039f53ac3d12970eca05cb0148035e89&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg",
-        "bid": 1,
-        "content": "发生的房间爱发打发斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬",
-        "summary": "这是我的",
-        "goodCount": 20,
-        "commentCount": 30,
-        "commentList": [
-          {
-            name: 'jack',
-            comment: '这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论'
-          },
-          {
-            name: 'tom',
-            comment: '这是我的第shi个评论'
-          }
-        ],
-        "comment1": "jack: 这是我的第一个评论",
-        "comment2": "sam: 这是我的第二个评论",
-        "isTop": false,
-        "state": 0
-      },
       hasSupport: false,
       isShowAllComment: false
     }
@@ -103,6 +81,15 @@ export default {
     showTime(timestamp) {
       let nowTime = new Date()
       return new moment(timestamp).showTime(nowTime)
+    },
+    supportGood() {
+      console.log('点赞+1')
+    },
+    noSupportGood() {
+      console.log('点赞-1')
+    },
+    clickShowMore() {
+      this.isShowAllComment = !this.isShowAllComment
     }
   }
 }
@@ -113,6 +100,8 @@ export default {
     display: flex;
     flex-direction: column;
     background-color: #fff;
+    border: 1px solid #c5c5c5;
+    margin-bottom: 10px;
     .item-header {
       display: flex;
       padding: 6px;
@@ -163,6 +152,7 @@ export default {
       padding: 0 20px 16px 42px;
       .item-content {
         margin-bottom: 6px;
+        font-size: 16px;
       }
       .item-comment-box {
         .comment-less-box,.comment-more-box {

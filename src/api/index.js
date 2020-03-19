@@ -12,6 +12,8 @@ const Reg='Reg'
 const CheckMobile='CheckMobile'
 const Login='Login'
 const ResetPwd='ResetPwd'
+const NewTopic='NewTopic'
+const BaTopicList='BaTopicList'
 
 export default class api extends base {
   // static getBaList(keyword) {
@@ -60,6 +62,14 @@ export default class api extends base {
   }
   static resetPwd(data){
     const url = `${this.baseUrl}/${ResetPwd}`
+    return this.post(url,data)
+  }
+  static newTopic(data){
+    const url = `${this.baseUrl}/${NewTopic}`
+    return this.post(url,data)
+  }
+  static BaTopicList(data){
+    const url = `${this.baseUrl}/${BaTopicList}`
     return this.post(url,data)
   }
   static getOnlineConfig(){
