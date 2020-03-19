@@ -30,6 +30,8 @@
      </div>
   <div class="blank-box" v-for="n in blankListLength" :key="n+'b'"></div>
   </div>
+
+  <TabBar/>
 </div>
 </template>
 
@@ -43,8 +45,12 @@ const { getOnlineConfig, findBlacklist } = data
 const { expire_time } = config
 import { mapGetters } from 'vuex'
 import storage from '@/utils/storage'
+import TabBar from '@/components/tabBar'
 
 export default {
+  components: {
+    TabBar
+  },
   data(){
     return {
       all_list:[],
