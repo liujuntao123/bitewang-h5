@@ -12,6 +12,7 @@ import MyTheme from './views/myTheme'
 import MyComment from './views/myComment'
 import PostsList from './views/PostsList'
 import PageCover from './views/pageCover'
+import Posting from './views/posting'
 
 Vue.use(Router)
 
@@ -76,6 +77,11 @@ export default new Router({
       path: '/pagecover',
       name: 'pagecover',
       component: PageCover
+    },
+    {
+      path: '/posting',
+      name: 'posting',
+      component: Posting
     }
   ]
 })

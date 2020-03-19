@@ -30,6 +30,8 @@
       width: 3rem;
       height: 3rem;
     }
+    .posting-btn {
+    }
     }
   }
 </style>
@@ -62,6 +64,13 @@
         alt=""
       >
     </div>
+    <div
+      class="posting-btn"
+      v-if="isShowPostingBtn"
+      @click="posting"
+    >
+      发布
+    </div>
   </div>
 </template>
 
@@ -72,8 +81,15 @@
       isShowBack:{
         type:Boolean,
         default:false
-        },
-      isShowSearch:{type:Boolean,default:false}
+      },
+      isShowSearch:{
+        type:Boolean,
+        default:false
+      },
+      isShowPostingBtn:{
+        type: Boolean,
+        default: false
+      }
     },
     data(){
       return {}

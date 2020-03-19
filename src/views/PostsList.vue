@@ -3,7 +3,6 @@
     <Header 
       class="header-style" 
       :is-show-back="true" 
-      @handleBack="headHandleBack"
       :title="headName"
     />
     <div class="post-list-container">
@@ -31,8 +30,6 @@ export default {
     PostsItem
   },
   methods: {
-    headHandleBack(){
-    }
   }
 }
 </script>
