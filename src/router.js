@@ -6,6 +6,7 @@ import BaList from './views/BaList'
 import PreReg from './views/PreReg'
 import Reg from './views/Reg'
 import Login from './views/Login'
+import Search from './views/search'
 import Mine from './views/mine'
 import MineInfo from './views/mineInfo'
 import MyTheme from './views/myTheme'
@@ -45,6 +46,11 @@ export default new Router({
       path:'/reg',
       name:'login',
       component:Login
+    },
+    {
+      path:'/search',
+      name:'search',
+      component:Search
     },
     {
       path:'/mine',

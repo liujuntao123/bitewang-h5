@@ -1,8 +1,10 @@
 <template>
   <div class="mine-info-container"> 
-    <div class="header">
-      个人资料
-    </div>
+    <Header 
+      :is-show-back="true" 
+      title="个人资料"
+      class="header-fixed"
+    />
     <div class="content">
       <div class="list">
         <div class="item">
@@ -36,7 +38,13 @@
 </template>
 
 <script>
+import Header from '@/components/header'
+import api from '@/api'
+
 export default {
+  components: {
+    Header
+  },
   data(){
     return{
       nickname:'肯德基',
@@ -46,23 +54,16 @@ export default {
     }
   },
   methods:{
-
   }
 }
 </script>
 
 <style lang="less" scoped>
-.header{
+.header-fixed{
     position: fixed;
     top: 0;
     left: 0;
-    font-size: 16px;
     width: 100%;
-    height: 50px;
-    line-height: 50px;
-    padding: 0 10px;
-    color: #fff;
-    background: #de4d53;
   }
   .mine-info-container{
     font-size: 14px;

@@ -1,27 +1,25 @@
 <template>
   <div class="mine-container">
-    <div class="header">
-      我
-    </div>
+    <Header title="我" class="header-fixed" />
     <div class="mine-content">
-      <div class="avatar">
+      <div class="avatar" @click="handleMineInfo">
         <img
           :src="avatar"
           alt=""
         >
       </div>
-      <div class="name">
+      <div class="name" @click="handleMineInfo">
         {{ nickname }}
       </div>
       <div class="brief">
         {{ profile }}
       </div>
       <div class="info">
-        <div class="info-item">
+        <div class="info-item" @click="handleTheme">
           <p class="info-value">{{ topic_count }}</p>
           <p class="info-title">主题</p>
         </div>
-        <div class="info-item">
+        <div class="info-item" @click="handleComment">
           <p class="info-value">{{ comment_count }}</p>
           <p class="info-title">评论</p>
         </div>
@@ -37,13 +35,19 @@
       </div>
     </div>
     <div class="footer">
-      <a href="javascript:;" class="logout">退出登录</a>
+      <a href="javascript:;" class="logout" @click="handleLogout">退出登录</a>
     </div>
   </div>
 </template>
 
 <script>
+import Header from '@/components/header'
+import api from '@/api'
+
 export default {
+  components: {
+    Header
+  },
   data(){
     return{
       nickname:'肯德基',
@@ -55,29 +59,35 @@ export default {
     }
   },
   methods:{
-
+    handleMineInfo () {
+      this.$router.push({path: '/mineInfo'})
+    },
+    handleTheme () {
+      this.$router.push({path: '/myTheme'})
+    },
+    handleComment () {
+      this.$router.push({path: '/myComment'})
+    },
+    handleLogout () {
+      console.log('退出登录')
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-  .header{
+  .header-fixed{
     position: fixed;
     top: 0;
     left: 0;
-    font-size: 16px;
     width: 100%;
-    height: 50px;
-    line-height: 50px;
-    padding: 0 10px;
-    color: #fff;
-    background: #de4d53;
   }
   .mine-container{
     font-size: 14px;
     .mine-content{
       margin-top: 50px;
       padding: 10px 0;
+      word-break: break-all;
     }
     .avatar{
       width: 60px;
