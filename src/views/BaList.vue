@@ -15,7 +15,8 @@
     @dragstart="dragStart(index,$event)"
     @dragover="dragOver(index,$event)"
     @dragleave="dragLeave(index,$event)"
-    @dragend="dragEnd(index,$event)">
+    @dragend="dragEnd(index,$event)"
+    @click="goBaPostList(item)">
      <span
             @touchstart="handleDelete(index)"
             class="delete-btn"
@@ -186,7 +187,7 @@ export default {
         this.timeOutEvent = 0
         this.longTap()
       }, 1000)
-      e.preventDefault();
+      // e.preventDefault();
       
     },
     gtouchmove (e) {
@@ -302,6 +303,9 @@ export default {
     //   e.preventDefault();
     //   console.log('dragleave>>>>>>>>')
     // }
+    goBaPostList(item) {
+      this.$router.push({name:'postslist',params:{item: item}})
+    }
   }
 }
 </script>

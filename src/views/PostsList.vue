@@ -18,18 +18,32 @@
 import api from '@/api'
 import Header from './../components/header'
 import PostsItem from './../components/postsitem'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
     return {
-      headName: '比特币BTC',
+      headName: '',
     }
+  },
+  computed: {
+    ...mapGetters(
+      {sid: 'userInfo/getSid'}
+    )
+  },
+  mounted() {
+    document.title = this.$route.params.item.name
+    this.headName = this.$route.params.item.name
+    this.getPostsList()
   },
   components: {
     Header,
     PostsItem
   },
   methods: {
+    getPostsList() {
+      console.log('sssssid:', this.sid)
+    }
   }
 }
 </script>
