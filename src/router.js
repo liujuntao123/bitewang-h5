@@ -14,6 +14,7 @@ import MyComment from './views/myComment'
 import PostsList from './views/PostsList'
 import PageCover from './views/pageCover'
 import Posting from './views/posting'
+import PostDetails from './views/postDetails'
 
 Vue.use(Router)
 
@@ -90,6 +91,11 @@ export default new Router({
       path: '/posting',
       name: 'posting',
       component: Posting
+    },
+    {
+      path: '/postdetails',
+      name: 'postdetails',
+      component: PostDetails
     }
   ]
 })
