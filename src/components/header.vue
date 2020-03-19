@@ -27,6 +27,13 @@
         alt=""
       >
     </div>
+    <div
+      class="posting-btn"
+      v-if="isShowPostingBtn"
+      @click="posting"
+    >
+      发布
+    </div>
   </div>
 </template>
 
@@ -37,8 +44,19 @@
       isShowBack:{
         type:Boolean,
         default:false
-        },
-      isShowSearch:{type:Boolean,default:false}
+      },
+      isShowSearch:{
+        type:Boolean,
+        default:false
+      },
+      isShowDiy:{
+        type:Boolean,
+        default:false
+      },
+      isShowPostingBtn:{
+        type: Boolean,
+        default: false
+      }
     },
     data(){
       return {}
