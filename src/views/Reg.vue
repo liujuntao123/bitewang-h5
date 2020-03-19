@@ -21,6 +21,7 @@
 
 <script>
 import api from '@/api'
+import { Toast } from 'mint-ui';
 
 export default {
   data(){
@@ -32,11 +33,16 @@ export default {
   },
   mounted(){
     document.title='填写用户信息'
-    // this.phone=this.$router.params.phone
-    this.phone='13927303506'
+    this.phone=this.$route.params.phone
+    console.log('phone',this.phone)
+    // 如果是用户自己手动进来的，则跳回到prereg页面
+    if(!this.phone){
+      this.$router.push('prereg')
+    }
   },
   methods:{
     handleSubmit(){
+      console.log(this.$store.state.userInfo.userInfo)
       if(this.nickname.trim().length===0){
         return
       }
@@ -51,7 +57,13 @@ export default {
         avatar:this.avatar
       }
       api.reg(obj).then(res=>{
-        console.log('reg success')
+        if(res.result==0){
+          console.log('reg success',res)
+          this.$store.dispatch('userInfo/setUserInfo',res)
+          this.$router.push('balist')
+        }else {
+          Toast(res.msg)
+        }
       })
     }
   }

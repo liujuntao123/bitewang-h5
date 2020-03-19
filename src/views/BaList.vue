@@ -40,6 +40,8 @@ import config from '@/config'
 import data from '@/utils/onlineconfig'
 const { getOnlineConfig, findBlacklist } = data
 const { expire_time } = config
+import { mapGetters } from 'vuex'
+import storage from '@/utils/storage'
 
 export default {
   data(){
@@ -52,6 +54,12 @@ export default {
       blankListLength:0,
       hasMoved:false
     }
+  },
+  computed: {
+  // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters(
+      {sid:'userInfo/getSid'}
+    )
   },
   mounted() {
     // this.draggable = true;
@@ -81,43 +89,53 @@ export default {
     setBlankList(){
       this.blankListLength=4-this.all_list.length%4
     },
-    getBaList() {
+    getBaList() {console.log('sid',this.sid)
       // 从storage里面取，如果过期了，则重新拉
-      var timestamp = Date.parse(new Date())
-      var data_expiration = localStorage.getItem('data_expiration')
-      
-      if (data_expiration && data_expiration > timestamp) {
-        //如果有缓存，且缓存没有过期
-        let all_list = localStorage.getItem('baList')
-        // all_list = this.filterBlackList(all_list)
-        all_list=JSON.parse(all_list)
-        this.all_list = all_list
-        return Promise.resolve(all_list)
-      } else {
-        return api.getBaList().then(res => {console.log('res',res)
-          // let all_list = res.baList.sort((a, b) => b.level - a.level)
-          let all_list = localStorage.getItem('baList')
-          all_list=JSON.parse(all_list)
-          console.log('all_list>>>>>',all_list)
-          let hasStorage = !!all_list
-          all_list = all_list || []
-          // console.log('all_list',all_list)
-          let new_list = res.baList
-          // 等级为10且原先没有的吧，则加到最前面
-          if (hasStorage) {
-            new_list = new_list.filter(
-              item => item.level >= 10 && !all_list.some(it => it.id == item.id)
-            )
-          }
-          all_list = [...new_list, ...all_list]
-          console.log('all_list', all_list)
-          console.log('blacklist', this.blacklist)
-          this.all_list = all_list
-          this.setBaList()
-          // this.all_list = this.filterBlackList(this.all_list)
-          return this.all_list
+      let list=storage.getFromLocalStorage('baList')
+      if(list){
+        this.all_list=list
+        return Promise.resolve()
+      }else {
+        return api.getBaList({sid:this.sid}).then(res=>{
+          this.all_list=res.baList
+          storage.setToLocalStorage(this.all_list, 'baList', 20)
         })
       }
+      // var timestamp = Date.parse(new Date())
+      // var data_expiration = localStorage.getItem('data_expiration'+'_balist')
+      
+      // if (data_expiration && data_expiration > timestamp) {
+      //   //如果有缓存，且缓存没有过期
+      //   let all_list = localStorage.getItem('baList')
+      //   // all_list = this.filterBlackList(all_list)
+      //   all_list=JSON.parse(all_list)
+      //   this.all_list = all_list
+      //   return Promise.resolve(all_list)
+      // } else {
+      //   return api.getBaList().then(res => {console.log('res',res)
+      //     // let all_list = res.baList.sort((a, b) => b.level - a.level)
+      //     let all_list = localStorage.getItem('baList')
+      //     all_list=JSON.parse(all_list)
+      //     console.log('all_list>>>>>',all_list)
+      //     let hasStorage = !!all_list
+      //     all_list = all_list || []
+      //     // console.log('all_list',all_list)
+      //     let new_list = res.baList
+      //     // 等级为10且原先没有的吧，则加到最前面
+      //     if (hasStorage) {
+      //       new_list = new_list.filter(
+      //         item => item.level >= 10 && !all_list.some(it => it.id == item.id)
+      //       )
+      //     }
+      //     all_list = [...new_list, ...all_list]
+      //     console.log('all_list', all_list)
+      //     console.log('blacklist', this.blacklist)
+      //     this.all_list = all_list
+      //     this.setBaList()
+      //     // this.all_list = this.filterBlackList(this.all_list)
+      //     return this.all_list
+      //   })
+      // }
     },
     filterBlackList(list) {
       return list.filter(
@@ -181,7 +199,7 @@ export default {
       e.preventDefault();
     },
     gtouchend (item) {
-      alert('touch end')
+      // alert('touch end')
       clearTimeout(this.timeOutEvent)
       this.timeOutEvent = 0
       if(!this.draggable&&!this.hasMoved){
