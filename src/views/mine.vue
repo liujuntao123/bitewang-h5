@@ -4,27 +4,27 @@
     <div class="mine-content">
       <div class="avatar" @click="handleMineInfo">
         <img
-          :src="avatar"
+          :src="userInfo.avatar"
           alt=""
         >
       </div>
       <div class="name" @click="handleMineInfo">
-        {{ nickname }}
+        {{ userInfo.nickname }}
       </div>
       <div class="brief">
-        {{ profile }}
+        {{ userInfo.profile }}
       </div>
       <div class="info">
         <div class="info-item" @click="handleTheme">
-          <p class="info-value">{{ topic_count }}</p>
+          <p class="info-value">{{ userInfo.topicCount || '0' }}</p>
           <p class="info-title">主题</p>
         </div>
         <div class="info-item" @click="handleComment">
-          <p class="info-value">{{ comment_count }}</p>
+          <p class="info-value">{{ userInfo.commentCount || '0' }}</p>
           <p class="info-title">评论</p>
         </div>
         <div class="info-item">
-          <p class="info-value">{{ score }}</p>
+          <p class="info-value">{{ userInfo.score || '0' }}</p>
           <p class="info-title">积分</p>
         </div>
       </div>
@@ -33,30 +33,40 @@
         <div class="item">联系我们</div>
         <div class="item">关于</div>
       </div>
+      <div class="footer">
+        <a href="javascript:;" class="logout" @click="handleLogout">退出登录</a>
+      </div>
     </div>
-    <div class="footer">
-      <a href="javascript:;" class="logout" @click="handleLogout">退出登录</a>
-    </div>
+   
+    <TabBar title="我" class="" />
   </div>
 </template>
 
 <script>
 import Header from '@/components/header'
+import TabBar from '@/components/tabBar'
 import api from '@/api'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    Header
+    Header,
+    TabBar
   },
   data(){
     return{
-      nickname:'肯德基',
-      avatar:'https://static001.geekbang.org/resource/image/15/be/1538be68a5f597ab1baf179a4a724ebe.jpg?x-oss-process=image/resize,m_fill,h_212,w_330',
-      profile:'奋斗啦放假放假了卡就哭了领导看见啊倒计时打发了；进口量大放大了空间啊大家奋斗卡觉得撒娇放大说了空间里的打开链接撒娇',
-      topic_count: 999999999993333333333333399444,
-      comment_count: 10,
-      score: 790,
+      // nickname:'肯德基',
+      // avatar:'https://static001.geekbang.org/resource/image/15/be/1538be68a5f597ab1baf179a4a724ebe.jpg?x-oss-process=image/resize,m_fill,h_212,w_330',
+      // profile:'奋斗啦放假放假了卡就哭了领导看见啊倒计时打发了；进口量大放大了空间啊大家奋斗卡觉得撒娇放大说了空间里的打开链接撒娇',
+      // topicCount: 999999999993333333333333399444,
+      // commentCount: 10,
+      // score: 790,
     }
+  },
+  computed: {
+    ...mapGetters(
+      {userInfo:'userInfo/getUserInfo'}
+    )
   },
   methods:{
     handleMineInfo () {
@@ -69,7 +79,8 @@ export default {
       this.$router.push({path: '/myComment'})
     },
     handleLogout () {
-      console.log('退出登录')
+      console.log('退出登录', this.userInfo)
+
     }
   }
 }
@@ -85,7 +96,7 @@ export default {
   .mine-container{
     font-size: 14px;
     .mine-content{
-      margin-top: 50px;
+      margin: 50px 0;
       padding: 10px 0;
       word-break: break-all;
     }

@@ -10,25 +10,25 @@
         <div class="item">
           <div class="item-label">头像</div>
           <div class="item-value">
-            <img :src="avatar" alt="" class="avatar-pic">
+            <img :src="userInfo.avatar" alt="" class="avatar-pic">
           </div>
         </div>
         <div class="item">
           <div class="item-label">手机号</div>
           <div class="item-value">
-            {{mobile}}
+            {{userInfo.mobile}}
           </div>
         </div>
         <div class="item">
           <div class="item-label">昵称</div>
           <div class="item-value">
-            {{nickname}}
+            {{userInfo.nickname}}
           </div>
         </div>
         <div class="item">
           <div class="item-label">个人简介</div>
           <div class="item-value">
-            {{profile}}
+            {{userInfo.profile}}
           </div>
         </div>
       </div>
@@ -40,6 +40,7 @@
 <script>
 import Header from '@/components/header'
 import api from '@/api'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -47,11 +48,16 @@ export default {
   },
   data(){
     return{
-      nickname:'肯德基',
-      mobile:'18888888888',
-      avatar:'https://static001.geekbang.org/resource/image/15/be/1538be68a5f597ab1baf179a4a724ebe.jpg?x-oss-process=image/resize,m_fill,h_212,w_330',
-      profile:'奋斗啦放假放假了卡就哭了领导看见啊倒计时打发了；进口量大放大了空间啊大家奋斗卡觉得撒娇放大说了空间里的打开链接撒娇',
+      // nickname:'肯德基',
+      // mobile:'18888888888',
+      // avatar:'https://static001.geekbang.org/resource/image/15/be/1538be68a5f597ab1baf179a4a724ebe.jpg?x-oss-process=image/resize,m_fill,h_212,w_330',
+      // profile:'',
     }
+  },
+  computed: {
+    ...mapGetters(
+      {userInfo:'userInfo/getUserInfo'}
+    )
   },
   methods:{
   }
