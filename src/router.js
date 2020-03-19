@@ -66,6 +66,7 @@ export default new Router({
       name:'myComment',
       component:MyComment
     },
+    {
       path: '/postslist',
       name: 'postslist',
       component: PostsList
