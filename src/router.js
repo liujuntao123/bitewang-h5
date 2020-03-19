@@ -11,6 +11,7 @@ import MineInfo from './views/mineInfo'
 import MyTheme from './views/myTheme'
 import MyComment from './views/myComment'
 import PostsList from './views/PostsList'
+import PageCover from './views/pageCover'
 
 Vue.use(Router)
 
@@ -42,7 +43,7 @@ export default new Router({
       component:Reg
     },
     {
-      path:'/reg',
+      path:'/login',
       name:'login',
       component:Login
     },
@@ -70,6 +71,11 @@ export default new Router({
       path: '/postslist',
       name: 'postslist',
       component: PostsList
+    },
+    {
+      path: '/pagecover',
+      name: 'pagecover',
+      component: PageCover
     }
   ]
 })
