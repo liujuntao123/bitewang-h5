@@ -6,6 +6,7 @@ import BaList from './views/BaList'
 import PreReg from './views/PreReg'
 import Reg from './views/Reg'
 import Login from './views/Login'
+import Search from './views/search'
 import Mine from './views/mine'
 import MineInfo from './views/mineInfo'
 import MyTheme from './views/myTheme'
@@ -17,10 +18,12 @@ import PostDetails from './views/postDetails'
 
 Vue.use(Router)
 
+console.log('router do')
+
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/balist',
       name: 'balist',
       component: BaList
     },
@@ -48,6 +51,11 @@ export default new Router({
       path:'/login',
       name:'login',
       component:Login
+    },
+    {
+      path:'/search',
+      name:'search',
+      component:Search
     },
     {
       path:'/mine',

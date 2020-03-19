@@ -3,12 +3,18 @@ import App from './App.vue'
 import router from './router'
 import infiniteScroll from 'vue-infinite-scroll'
 // import VueDND from 'awe-dnd'
-import dragpolyfill from './lib/draggable-polyfill';
-import vueFinger from './lib/vue-finger'
+// import dragpolyfill from './lib/draggable-polyfill';
+// import vueFinger from './lib/vue-finger'
 import {polyfill} from "mobile-drag-drop";
 import 'mint-ui/lib/style.css'
+import { Spinner } from 'mint-ui';
+
 // import  { ToastPlugin } from 'vux'
 // Vue.use(ToastPlugin)
+// import Vuex from 'vuex'
+// Vue.use(Vuex)
+import store from './store'
+import './beforeEach'
 
 // optional import of scroll behaviour
 import {scrollBehaviourDragImageTranslateOverride} from "mobile-drag-drop/scroll-behaviour";
@@ -22,10 +28,12 @@ polyfill({
 // dragpolyfill()
 
 // Vue.use(VueDND)
-Vue.use(vueFinger)
+// Vue.use(vueFinger)
 
 Vue.use(infiniteScroll)
+Vue.component(Spinner.name, Spinner);
 Vue.config.productionTip = false
+
 
 
 
@@ -35,5 +43,6 @@ window.addEventListener("popstate", function(e) {
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
