@@ -23,21 +23,21 @@ import { setTimeout } from 'timers';
 export default {
   data() {
     return {
-      headTitle: '',
       textModel: ''
     }
   },
   computed: {
-    ...mapGetters(
-      {sid: 'userInfo/getSid'}
-    )
+    ...mapGetters({
+      sid: 'userInfo/getSid',
+      headTitle: 'baInfo/getBaName',
+      bid: 'baInfo/getBaId'
+    })
   },
   components: {
     Header
   },
   mounted() {
-    document.title = this.$route.params.item.name
-    this.headTitle = this.$route.params.item.name
+    document.title = this.headTitle
   },
   methods: {
     submitPosting() {
@@ -47,7 +47,7 @@ export default {
       }
       let newTopicObj = {
         sid: this.sid,
-        bid: this.$route.params.item.id,
+        bid: this.bid,
         content: postText
       }
       api.newTopic(newTopicObj).then(res => {
@@ -55,8 +55,8 @@ export default {
         if(res.result === 0) {
           Toast('发布成功')
           setTimeout(() => {
-            this.$router.replace({name:'postslist',params:{item: this.$route.params.item}})
-          },1000)
+            this.$router.replace({name:'postslist',params:{postRefreshPostList: true}})
+          },1500)
         } else {
           Toast(res.message)
         }

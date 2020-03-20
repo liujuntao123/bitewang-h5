@@ -1,5 +1,5 @@
 <template>
-  <div class="item-box">
+  <div class="item-box" @click="goPostDetail">
     <div class="item-header">
       <div class="item-img-box">
         <img class="item-img-img" :src="item.avatar" alt="">
@@ -28,32 +28,16 @@
         {{ item.summary }}
       </div>
       <div class="item-comment-box" v-if="item.commentCount > 0">
-        <div class="comment-less-box" v-if="item.commentCount <= 2">
-          <div class="comment-less-for-box" v-for="(comment, index) in item.commentList" :key="index">
+        <div class="comment-less-box">
+          <div class="comment-less-for-box">
             <div class="comment-item">
-              <span class="comment-name">{{ comment.name }}:</span> &nbsp;&nbsp;{{ comment.comment }}
+              <span class="comment-name">{{ item.comment1 }}:</span>
+            </div>
+            <div class="comment-item" v-if="item.comment2">
+              <span class="comment-name">{{ item.comment2 }}:</span>
             </div>
           </div>
-        </div>
-        <div v-else class="comment-more-box">
-          <div v-if="!isShowAllComment">
-            <div class="comment-less-for-box">
-              <div class="comment-item">
-                <span class="comment-name">{{ item.commentList[0].name }}:</span> &nbsp;&nbsp;{{ item.commentList[0].comment }}
-              </div>
-              <div class="comment-item">
-                <span class="comment-name">{{ item.commentList[1].name }}:</span> &nbsp;&nbsp;{{ item.commentList[1].comment }}
-              </div>
-            </div>
-            <div @click="clickShowMore" class="show-more-comment">{{"查看全部("+item.commentCount+"评论)"}}</div>
-          </div>
-          <div v-else>
-            <div class="comment-less-for-box" v-for="(comment, index) in item.commentList" :key="index">
-              <div class="comment-item">
-                <span class="comment-name">{{ comment.name }}:</span> &nbsp;&nbsp;{{ comment.comment }}
-              </div>
-            </div>
-          </div>
+          <div v-if="item.commentCount > 2" @click="clickShowMore" class="show-more-comment">{{"查看全部("+item.commentCount+"评论)"}}</div>
         </div>
       </div>
     </div>
@@ -73,8 +57,7 @@ export default {
   },
   data() {
     return {
-      hasSupport: false,
-      isShowAllComment: false
+      hasSupport: false
     }
   },
   methods: {
@@ -83,13 +66,14 @@ export default {
       return new moment(timestamp).showTime(nowTime)
     },
     supportGood() {
-      console.log('点赞+1')
     },
     noSupportGood() {
-      console.log('点赞-1')
+    },
+    goPostDetail() {
+      this.$emit("goPostDetail")
     },
     clickShowMore() {
-      this.isShowAllComment = !this.isShowAllComment
+      
     }
   }
 }
@@ -117,7 +101,7 @@ export default {
       .item-post-info {
         font-size: 14px;
         margin-left: 6px;
-        width: 120px;
+        width: 130px;
         .item-post-name {
           font-size: 16px;
         }
@@ -155,7 +139,7 @@ export default {
         font-size: 16px;
       }
       .item-comment-box {
-        .comment-less-box,.comment-more-box {
+        .comment-less-box {
           .comment-less-for-box {
             .comment-item {
               .comment-name {
@@ -163,8 +147,6 @@ export default {
               }
             }
           }
-        }
-        .comment-more-box {
           .show-more-comment {
             margin-top: 6px;
             float: right;
