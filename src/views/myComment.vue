@@ -15,16 +15,16 @@
         <div class="item" v-for="(item, index) in list" :key="index">
           <div class="item-head">
             <div class="item-title">
-              <p class="title">{{item.summary}}</p>
-              <p class="created-at">{{item.createdAt}}</p>
+              <p class="title">{{item.baName}}</p>
+              <p class="created-at">{{timeFormat(item.createdAt)}}</p>
             </div>
-            <div class="item-delete" @click="handleDelete"></div>
+            <div class="item-delete" @click="handleDelete(item)"></div>
           </div>
           <div class="item-content">
-            {{item.content}}
+            {{item.summary}}
           </div>
           <div class="item-foot">
-            {{item.content}}
+            {{item.tSummary}}
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
         <mt-spinner type="fading-circle" :size="22" color="#888" class="loading-more-icon"/>
         <span class="loading-more-txt">加载中...</span>
       </div>
-      <div class="loading-all" v-if="total>0 && list.length >= total">没有更多了~</div>
+      <div class="loading-all" v-if="!loading && beginCid === 0">没有更多了~</div>
     </div>
   </div>
 </template>
@@ -41,6 +41,8 @@
 import Header from '@/components/header'
 import { MessageBox, Toast } from 'mint-ui';
 import api from '@/api'
+import { mapGetters } from 'vuex'
+import moment from '@/utils/moment'
 
 export default {
   components: {
@@ -49,59 +51,73 @@ export default {
   data(){
     return{
       loading: false,
-      total: '',
-      list: [
-        {
-          summary: 'BTC吧',
-          createdAt: 234234234324,
-          content: '这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖',
-          goodCount: 20,
-          commentCount: 30,
-          isTop: true,
-        },
-        {
-          summary: 'LTC吧',
-          createdAt: 234234234324,
-          content: '这是我的第一帖…',
-          goodCount: 0,
-          commentCount: 0,
-          isTop: false,
-        }
-      ]
+      beginCid: -1,
+      list: [],
+      uid: '',
+      name: '我'
     }
+  },
+  computed: {
+    ...mapGetters(
+      {sid:'userInfo/getSid'}
+    )
+  },
+  created () {
+    this.uid = this.$route.query.uid
+    this.name = this.$route.query.name || '我'
+  },
+  mounted () {
+    //手动发评论
+    // api.newComment({
+    //   sid: this.sid,
+    //   tid: 2056, 
+    //   content: "皮卡发的2056评论4..."
+    // }).then(res=>{
+      
+    // })
   },
   methods:{
     loadMore() {
-      this.loading = true;
-      this.total = 22
-      if(this.list.length >= 22) {
-        this.loading = false;
-        return
-      }else{
-        setTimeout(() => {
-          let last = this.list.length - 1;
-          for (let i = 1; i <= 10; i++) {
-            this.list.push({
-              summary: 'BTC吧'+ (last + i),
-              createdAt: 234234234324,
-              content: '这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖这是我的第二帖',
-              goodCount: 20,
-              commentCount: 30,
-            });
-          }
+      if(this.beginCid !== 0){
+        this.loading = true;
+        api.userCommentList({
+          sid: this.sid,
+          uid: this.uid,
+          beginCid: this.beginCid
+        }).then(res=>{
+          let newList = res.commentList.filter(item => item.state == 0)
+          this.list = this.list.concat(newList)
+          this.beginCid = res.preBeginCid
           this.loading = false;
-        }, 2000);
-      } 
+        }).catch(res => {
+          this.loading = false;
+        })
+      }
     },
-    handleDelete () {
+    handleDelete (item) {
       MessageBox.confirm('确认删除?').then(action => {
-        Toast('删除成功！');
+        api.handlePost({
+          sid: this.sid,
+          handleType: "deleteComment",
+          from: "user",
+          postId: item.cid
+        }).then(res=>{
+          if(res.result == 0){
+            this.list.splice(index,1);
+            Toast('删除成功！');
+          }else{
+            Toast(res.msg || '删除失败！');
+          }
+        })
       }).catch(err => {
         if (err == 'cancel') {
           console.log('取消');
         } 
       });
-    }
+    },
+    timeFormat(timestamp) {
+      return new moment(timestamp).format('YYYY-MM-DD')
+    },
   }
 }
 </script>
