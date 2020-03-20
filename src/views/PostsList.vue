@@ -13,7 +13,7 @@
         infinite-scroll-distance="10"
       >
         <div class="list-item" v-for="(item, index) in lists" :key="index">
-          <PostsItem :item="item" />
+          <PostsItem :item="item" @goPostDetail="goPostDetail(item)" />
         </div>
       </div>
       <div class="loading-more" v-if="isLoading">
@@ -232,6 +232,10 @@ export default {
     },
     goPostingPage() {
       this.$router.push({name:'posting',params:{item: this.$route.params.item}})
+    },
+    goPostDetail(item) {
+      console.log('itemitemitem:', item)
+      this.$router.push({name:'postdetails',params:{itemDetail: item}})
     }
   }
 }

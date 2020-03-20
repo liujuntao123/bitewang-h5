@@ -1,5 +1,5 @@
 <template>
-  <div class="item-box">
+  <div class="item-box" @click="goPostDetail">
     <div class="item-header">
       <div class="item-img-box">
         <img class="item-img-img" :src="item.avatar" alt="">
@@ -87,6 +87,9 @@ export default {
     },
     noSupportGood() {
       console.log('点赞-1')
+    },
+    goPostDetail() {
+      this.$emit("goPostDetail")
     },
     clickShowMore() {
       this.isShowAllComment = !this.isShowAllComment
