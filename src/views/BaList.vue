@@ -310,7 +310,8 @@ export default {
     //   console.log('dragleave>>>>>>>>')
     // }
     goBaPostList(item) {
-      this.$router.push({name:'postslist',params:{item: item}})
+      this.$store.dispatch('baInfo/setbaItem', item)
+      this.$router.push('postslist')
     }
   }
 }

@@ -15,6 +15,7 @@ const ResetPwd='ResetPwd'
 const NewTopic='NewTopic'
 const BaTopicList='BaTopicList'
 const NewComment='NewComment'
+const TopicCommentList='TopicCommentList'
 
 export default class api extends base {
   // static getBaList(keyword) {
@@ -75,6 +76,10 @@ export default class api extends base {
   }
   static NewComment(data){
     const url = `${this.baseUrl}/${NewComment}`
+    return this.post(url,data)
+  }
+  static TopicCommentList(data){
+    const url = `${this.baseUrl}/${TopicCommentList}`
     return this.post(url,data)
   }
   static getOnlineConfig(){

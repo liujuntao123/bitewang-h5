@@ -50,11 +50,19 @@ export default {
       }
       let commentObj = {
         sid: this.sid,
-        tid: 2040,
+        tid: this.item.tid,
         content: this.commentText
       }
       this.commentText = ''
       api.NewComment(commentObj).then(res => {
+        if(res.result === 0) {
+          Toast('评论成功')
+          setTimeout(() => {
+            this.$router.replace({name:'postslist',params:{postRefreshPostList: true}})
+          },1500)
+        } else {
+          Toast(res.message)
+        }
         console.log('comment res:', res)
       })
     }

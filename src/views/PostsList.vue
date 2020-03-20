@@ -34,144 +34,24 @@ import Header from './../components/header'
 import PostsItem from './../components/postsitem'
 import { mapGetters } from 'vuex'
 
+
 export default {
   data() {
     return {
-      headName: '',
       isLoading: false,
       total: 0,
-      lists: [
-        {
-          "tid": 111,
-          "createdAt": 1584436510000,
-          "uid": "0d5a188c-ab7f-4aae-b9e2-823266fa6106",
-          "nickname": "人而且",
-          "avatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584546736064&di=039f53ac3d12970eca05cb0148035e89&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg",
-          "bid": 1,
-          "content": "发生的房间爱发打发斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬",
-          "summary": "这是我的",
-          "goodCount": 10,
-          "commentCount": 2,
-          "commentList": [
-            {
-              name: '给分为',
-              comment: '这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论'
-            },
-            {
-              name: '胖娃儿',
-              comment: '这是我的第shi个评论'
-            }
-          ],
-          "comment1": "jack: 这是我的第一个评论",
-          "comment2": "sam: 这是我的第二个评论",
-          "isTop": false,
-          "state": 0
-        },
-        {
-          "tid": 111,
-          "createdAt": 1584436510000,
-          "uid": "0d5a188c-ab7f-4aae-b9e2-823266fa6106",
-          "nickname": "jack",
-          "avatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584546736064&di=039f53ac3d12970eca05cb0148035e89&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg",
-          "bid": 1,
-          "content": "发生的房间爱发打发斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬",
-          "summary": "这是我的",
-          "goodCount": 20,
-          "commentCount": 4,
-          "commentList": [
-            {
-              name: 'jack',
-              comment: '这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论'
-            },
-            {
-              name: 'tom',
-              comment: '这是我的第shi个评论'
-            },
-            {
-              name: 'jack',
-              comment: '这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论'
-            },
-            {
-              name: 'tom',
-              comment: '这是我的第shi个评论'
-            }
-          ],
-          "comment1": "jack: 这是我的第一个评论",
-          "comment2": "sam: 这是我的第二个评论",
-          "isTop": true,
-          "state": 0
-        },
-         {
-          "tid": 111,
-          "createdAt": 1584436510000,
-          "uid": "0d5a188c-ab7f-4aae-b9e2-823266fa6106",
-          "nickname": "人而且",
-          "avatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584546736064&di=039f53ac3d12970eca05cb0148035e89&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg",
-          "bid": 1,
-          "content": "发生的房间爱发打发斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬",
-          "summary": "这是我的",
-          "goodCount": 10,
-          "commentCount": 2,
-          "commentList": [
-            {
-              name: '给分为',
-              comment: '这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论'
-            },
-            {
-              name: '胖娃儿',
-              comment: '这是我的第shi个评论'
-            }
-          ],
-          "comment1": "jack: 这是我的第一个评论",
-          "comment2": "sam: 这是我的第二个评论",
-          "isTop": false,
-          "state": 0
-        },
-        {
-          "tid": 111,
-          "createdAt": 1584436510000,
-          "uid": "0d5a188c-ab7f-4aae-b9e2-823266fa6106",
-          "nickname": "jack",
-          "avatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584546736064&di=039f53ac3d12970eca05cb0148035e89&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg",
-          "bid": 1,
-          "content": "发生的房间爱发打发斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬",
-          "summary": "这是我的",
-          "goodCount": 20,
-          "commentCount": 4,
-          "commentList": [
-            {
-              name: 'jack',
-              comment: '这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论'
-            },
-            {
-              name: 'tom',
-              comment: '这是我的第shi个评论'
-            },
-            {
-              name: 'jack',
-              comment: '这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论'
-            },
-            {
-              name: 'tom',
-              comment: '这是我的第shi个评论'
-            }
-          ],
-          "comment1": "jack: 这是我的第一个评论",
-          "comment2": "sam: 这是我的第二个评论",
-          "isTop": true,
-          "state": 0
-        }
-      ]
+      lists: []
     }
   },
   computed: {
-    ...mapGetters(
-      {sid: 'userInfo/getSid'}
-    )
+    ...mapGetters({
+      sid: 'userInfo/getSid',
+      headName: 'baInfo/getBaName',
+      bid: 'baInfo/getBaId'
+    })
   },
   mounted() {
-    document.title = this.$route.params.item.name
-    this.headName = this.$route.params.item.name
+    document.title = this.headName
     this.getPostsList()
   },
   components: {
@@ -182,12 +62,14 @@ export default {
     getPostsList() {
       let getListsObj = {
         sid: this.sid,
-        bid: this.$route.params.item.id,
+        bid: this.bid,
         index: 0,
         forceRefresh: false
       }
       api.BaTopicList(getListsObj).then(res => {
-        console.log('getBaTopicList res:', res)
+        if (res.result === 0) {
+          this.lists = res.topicList
+        }
       })
     },
     loadMore() {
@@ -198,43 +80,15 @@ export default {
         return
       } else {
         setTimeout(() => {
-          for (let i = 1; i <= 10; i++) {
-            this.lists.push({
-              "tid": 111,
-              "createdAt": 1584436510000,
-              "uid": "0d5a188c-ab7f-4aae-b9e2-823266fa6106",
-              "nickname": "人而且",
-              "avatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584546736064&di=039f53ac3d12970eca05cb0148035e89&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg",
-              "bid": 1,
-              "content": "发生的房间爱发打发斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬斯蒂芬",
-              "summary": "这是我的",
-              "goodCount": 10,
-              "commentCount": 2,
-              "commentList": [
-                {
-                  name: '给分为',
-                  comment: '这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论这是我的第一个评论'
-                },
-                {
-                  name: '胖娃儿',
-                  comment: '这是我的第shi个评论'
-                }
-              ],
-              "comment1": "jack: 这是我的第一个评论",
-              "comment2": "sam: 这是我的第二个评论",
-              "isTop": false,
-              "state": 0
-            });
-          }
+         
           this.loading = false;
         }, 2000)
       }
     },
     goPostingPage() {
-      this.$router.push({name:'posting',params:{item: this.$route.params.item}})
+      this.$router.push('posting')
     },
     goPostDetail(item) {
-      console.log('itemitemitem:', item)
       this.$router.push({name:'postdetails',params:{itemDetail: item}})
     }
   }
@@ -256,8 +110,8 @@ export default {
   }
   .post-list-container {
     margin-top: 50px;
-    height: calc(100% - 50px);
-    padding-bottom: 10px;
+    height: calc(100% - 110px);
+    padding-bottom: 5px;
     box-sizing: border-box;
     overflow: auto;
     .list-container {
@@ -289,7 +143,7 @@ export default {
   }
   .click-post-container {
     position: fixed;
-    bottom: 0;
+    bottom: 5px;
     left: calc(50% - 25px);
     width: 50px;
     height: 50px;
