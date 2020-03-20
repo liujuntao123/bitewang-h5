@@ -80,7 +80,9 @@ export default {
     },
     handleLogout () {
       console.log('退出登录', this.userInfo)
-
+      // 移除所有
+      localStorage.clear();
+      window.location.reload();
     }
   }
 }
