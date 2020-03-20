@@ -20,6 +20,7 @@ const UserCommentList='UserCommentList'
 const HandlePost='HandlePost'
 const UserInfo='UserInfo'
 const NewComment='NewComment'
+const TopicCommentList='TopicCommentList'
 
 export default class api extends base {
   // static getBaList(keyword) {
@@ -78,6 +79,14 @@ export default class api extends base {
     const url = `${this.baseUrl}/${BaTopicList}`
     return this.post(url,data)
   }
+  static NewComment(data){
+    const url = `${this.baseUrl}/${NewComment}`
+    return this.post(url,data)
+  }
+  static TopicCommentList(data){
+    const url = `${this.baseUrl}/${TopicCommentList}`
+    return this.post(url,data)
+  }
   static getOnlineConfig(){
     const url=`${this.baseUrl}/${onLineConfig}?d=${window.d}`
     return this.get(url)
@@ -104,10 +113,6 @@ export default class api extends base {
   }
   static userInfo(data){
     const url = `${this.baseUrl}/${UserInfo}`
-    return this.post(url,data)
-  }
-  static newComment(data){
-    const url = `${this.baseUrl}/${NewComment}`
     return this.post(url,data)
   }
 }

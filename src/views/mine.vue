@@ -93,7 +93,9 @@ export default {
     },
     handleLogout () {
       console.log('退出登录')
-
+      // 移除所有
+      localStorage.clear();
+      window.location.reload();
     }
   }
 }
