@@ -1,5 +1,8 @@
 import storage from '@/utils/storage'
 
+// 登录态的缓存时间,设为永不过期，暂时就用一年
+const expire_time=60*60*24*365
+
 const state = {
   userInfo: null,
   isLogin:false,
@@ -51,7 +54,6 @@ const actions = {
 const mutations = {
   setUserInfo(state, data) {console.log('mutation',data)
     state.userInfo=data
-    const expire_time=20000
     storage.setToLocalStorage(data, 'userInfo', expire_time)
   },
 }

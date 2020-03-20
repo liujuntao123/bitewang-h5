@@ -75,10 +75,10 @@ export default {
 
     getOnlineConfig.call(this).then(onlineConfig => {
       console.log('onlineConfig', onlineConfig)
-      this.blacklist = findBlacklist(onlineConfig)
-      console.log('blacklist', this.blacklist)
-      this.expire_time = onlineConfig.ba_list_refresh_seconds
-      this.getBaList().then(()=>{console.log('set blank list')
+      // this.blacklist = findBlacklist(onlineConfig)
+      // console.log('blacklist', this.blacklist)
+      this.expire_time = onlineConfig.ba_refresh_seconds
+      this.getBaList().then(()=>{
         this.setBlankList()
       })
       // this.getSystemInfo()
@@ -102,12 +102,12 @@ export default {
       if(list){
         this.all_list=list
         return Promise.resolve()
-      }else {
-        return api.getBaList({sid:this.sid}).then(res=>{
-          this.all_list=res.baList
-          storage.setToLocalStorage(this.all_list, 'baList', 20)
-        })
       }
+      return api.getBaList({sid:this.sid}).then(res=>{
+        this.all_list=res.baList
+        storage.setToLocalStorage(this.all_list, 'baList', this.expire_time)
+      })
+      
       // var timestamp = Date.parse(new Date())
       // var data_expiration = localStorage.getItem('data_expiration'+'_balist')
       
@@ -144,17 +144,17 @@ export default {
       //   })
       // }
     },
-    filterBlackList(list) {
-      return list.filter(
-        item => this.blacklist.indexOf(item.category) == -1 || item.from_search
-      )
-    },
-    setBaList() {
-      var timestamp = Date.parse(new Date())
-      var expiration = timestamp + this.expire_time * 1000
-      localStorage.setItem('baList', JSON.stringify(this.all_list))
-      localStorage.setItem('data_expiration', expiration)
-    },
+    // filterBlackList(list) {
+    //   return list.filter(
+    //     item => this.blacklist.indexOf(item.category) == -1 || item.from_search
+    //   )
+    // },
+    // setBaList() {
+    //   var timestamp = Date.parse(new Date())
+    //   var expiration = timestamp + this.expire_time * 1000
+    //   localStorage.setItem('baList', JSON.stringify(this.all_list))
+    //   localStorage.setItem('data_expiration', expiration)
+    // },
     tapAll(e) {
       // console.log('>>>>>>>')
       // alert('>>>>>>')
