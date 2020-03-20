@@ -55,12 +55,6 @@ export default {
   },
   data(){
     return{
-      // nickname:'肯德基',
-      // avatar:'https://static001.geekbang.org/resource/image/15/be/1538be68a5f597ab1baf179a4a724ebe.jpg?x-oss-process=image/resize,m_fill,h_212,w_330',
-      // profile:'奋斗啦放假放假了卡就哭了领导看见啊倒计时打发了；进口量大放大了空间啊大家奋斗卡觉得撒娇放大说了空间里的打开链接撒娇',
-      // topicCount: 999999999993333333333333399444,
-      // commentCount: 10,
-      // score: 790,
     }
   },
   computed: {
@@ -68,18 +62,37 @@ export default {
       {userInfo:'userInfo/getUserInfo'}
     )
   },
+  mounted () {
+    this.getUserInfo()
+  },
   methods:{
+    getUserInfo () {
+      api.userInfo({
+        sid: this.userInfo.sid,
+        uid: this.userInfo.uid
+      }).then(res=>{
+        let info = this.userInfo
+        info.nickname = res.nickname
+        info.avatar = res.avatar
+        info.profile = res.profile
+        info.topicCount = res.topicCount
+        info.commentCount = res.commentCount
+        info.score = res.score
+        info.state = res.state
+        this.$store.dispatch('userInfo/setUserInfo',info)
+      })
+    },
     handleMineInfo () {
       this.$router.push({path: '/mineInfo'})
     },
     handleTheme () {
-      this.$router.push({path: '/myTheme'})
+      this.$router.push({path: '/myTheme', query: {uid: this.userInfo.uid}})
     },
     handleComment () {
-      this.$router.push({path: '/myComment'})
+      this.$router.push({path: '/myComment', query: {uid: this.userInfo.uid}})
     },
     handleLogout () {
-      console.log('退出登录', this.userInfo)
+      console.log('退出登录')
 
     }
   }

@@ -11,7 +11,7 @@
     </Header>
     <div class="content">
       <div class="list">
-        <div class="item" v-for="(item, index) in list" :key="index" @click="handleAdd">{{item.baName}}</div>
+        <div class="item" v-for="(item, index) in list" :key="index" @click="handleAdd(item)">{{item.name}}</div>
       </div>
       <p class="search-tip">没有搜到想要到结果？<span class="search-apply">申请创建新吧</span></p>
     </div>
@@ -22,6 +22,12 @@
 import Header from '@/components/header'
 import { Toast } from 'mint-ui';
 import api from '@/api'
+import { mapGetters } from 'vuex'
+import storage from '@/utils/storage'
+import config from '@/config'
+import data from '@/utils/onlineconfig'
+const { getOnlineConfig, findBlacklist } = data
+const { expire_time } = config
 
 export default {
   components: {
@@ -30,33 +36,70 @@ export default {
   data () {
     return {
       searchWorld: '',
-      list: [{
-        tid: 111,
-        bid: 1,
-        baName: "比特币BTC",
-      },{
-        tid: 111,
-        bid: 2,
-        baName: "比特股BTAS",
-      },{
-        tid: 111,
-        bid: 3,
-        baName: "注意力币BAT",
-      },{
-        tid: 111,
-        bid: 4,
-        baName: "比特币BTCCCXXXXDDDDD比特币BTCCCXXXXDDDDDBTCCCXXXXDDDDDddddddddddddddddddddd",
-      }]
+      list: [],
+      baListId: []  //个人已存在的ba列表
     }
+  },
+  computed: {
+    ...mapGetters(
+      {sid:'userInfo/getSid'}
+    )
+  },
+  mounted () {
+    getOnlineConfig.call(this).then(onlineConfig => {
+      this.expire_time = onlineConfig.ba_refresh_seconds
+      this.getBaList()
+    })
   },
   methods: {
     // 搜索
     handleSearch () {
-      console.log('搜索：', this.searchWorld)
+      this.search()
+    },
+    // 获取个人币吧
+    getBaList() {
+      return api.getBaList({sid:this.sid}).then(res=>{
+        this.all_list=res.baList
+        storage.setToLocalStorage(this.all_list, 'baList', this.expire_time)
+      })
     },
     // 添加新吧到主页
-    handleAdd () {
-      Toast('添加成功！')
+    handleAdd (el) {
+      if(this.baListId.length <= 0){
+        let baList = storage.getFromLocalStorage('baList') || []
+        this.baListId = baList.map(item => item.id)
+      }
+      if(this.baListId.indexOf(el.id) > -1){
+        Toast('该币吧已存在！')
+      } else {
+        this.updateUserInfo(el.id)
+      }
+      
+    },
+    search () {
+      api.getBaList({
+        sid: this.sid,
+        keyword: this.searchWorld
+      }).then(res=>{
+        this.list = res.baList || []
+      })
+    },
+    updateUserInfo(id) {
+      let idList = this.baListId
+      idList.push(id)
+      api.updateUserInfo({
+        sid: this.sid,
+        type: 'ba',
+        baIdList: idList
+      }).then(res=>{
+        if(res.result == 0){
+          this.baListId = idList
+          Toast('添加成功！')
+          this.getBaList()
+        }else{
+          Toast('添加失败！')
+        }
+      })
     }
   }
 }

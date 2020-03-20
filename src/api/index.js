@@ -14,6 +14,12 @@ const Login='Login'
 const ResetPwd='ResetPwd'
 const NewTopic='NewTopic'
 const BaTopicList='BaTopicList'
+const UpdateUserInfo='UpdateUserInfo'
+const UserTopicList='UserTopicList'
+const UserCommentList='UserCommentList'
+const HandlePost='HandlePost'
+const UserInfo='UserInfo'
+const NewComment='NewComment'
 
 export default class api extends base {
   // static getBaList(keyword) {
@@ -79,5 +85,29 @@ export default class api extends base {
   static getOnlineConfig(){
     const url=`${this.baseUrl}/${onLineConfig}?d=wxapp`
     return this.get(url)
+  }
+  static updateUserInfo(data){
+    const url = `${this.baseUrl}/${UpdateUserInfo}`
+    return this.post(url,data)
+  }
+  static userTopicList(data){
+    const url = `${this.baseUrl}/${UserTopicList}`
+    return this.post(url,data)
+  }
+  static userCommentList(data){
+    const url = `${this.baseUrl}/${UserCommentList}`
+    return this.post(url,data)
+  }
+  static handlePost(data){
+    const url = `${this.baseUrl}/${HandlePost}`
+    return this.post(url,data)
+  }
+  static userInfo(data){
+    const url = `${this.baseUrl}/${UserInfo}`
+    return this.post(url,data)
+  }
+  static newComment(data){
+    const url = `${this.baseUrl}/${NewComment}`
+    return this.post(url,data)
   }
 }
