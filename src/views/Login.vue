@@ -52,7 +52,7 @@ export default {
       api.login(obj).then(res=>{
         console.log('login success',res)
         this.$store.dispatch('userInfo/setUserInfo',res)
-        window.location.href='/web#/balist'
+        this.$router.push('balist')
       })
     }
   }

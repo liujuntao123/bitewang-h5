@@ -80,10 +80,15 @@ export default {
         }, 1000);
       }
       timeCounter()
+      let deviceId=localStorage.getItem('deviceId')
+      if(!deviceId){
+        deviceId=utils.randomWord(false,32)
+        localStorage.setItem('deviceId',deviceId)
+      }
       let obj={
         phone:this.phone.trim(),
         zone:'86',
-        deviceId:utils.randomWord(false,32)
+        deviceId
       }
       api.mobileSms(obj).then(res=>{
         if(res.result==0){
