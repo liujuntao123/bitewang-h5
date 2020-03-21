@@ -2,7 +2,7 @@
   <div class="my-comment-container">
     <Header 
       :is-show-back="true" 
-      title="我的评论"
+      :title="name+'的评论'"
       class="header-fixed"
     />
     <div class="content">
@@ -18,7 +18,7 @@
               <p class="title">{{item.baName}}</p>
               <p class="created-at">{{timeFormat(item.createdAt)}}</p>
             </div>
-            <div class="item-delete" @click="handleDelete(item)"></div>
+            <div class="item-delete" @click="handleDelete(item, index)"  v-if="isOwner"></div>
           </div>
           <div class="item-content">
             {{item.summary}}
@@ -54,23 +54,27 @@ export default {
       beginCid: -1,
       list: [],
       uid: '',
-      name: '我'
+      name: '我',
+      isOwner: false, //是否是用户本身
     }
   },
   computed: {
     ...mapGetters(
-      {sid:'userInfo/getSid'}
+      {userInfo:'userInfo/getUserInfo'}
     )
   },
   created () {
-    this.uid = this.$route.query.uid
+    this.uid = this.$route.query.uid || this.userInfo.uid
     this.name = this.$route.query.name || '我'
+    if(this.uid == this.userInfo.uid){
+      this.isOwner = true
+    }
   },
   mounted () {
     //手动发评论
-    // api.newComment({
-    //   sid: this.sid,
-    //   tid: 2056, 
+    // api.NewComment({
+    //   sid: this.userInfo.sid,
+    //   tid: 2213, 
     //   content: "皮卡发的2056评论4..."
     // }).then(res=>{
       
@@ -81,7 +85,7 @@ export default {
       if(this.beginCid !== 0){
         this.loading = true;
         api.userCommentList({
-          sid: this.sid,
+          sid: this.userInfo.sid,
           uid: this.uid,
           beginCid: this.beginCid
         }).then(res=>{
@@ -94,10 +98,10 @@ export default {
         })
       }
     },
-    handleDelete (item) {
+    handleDelete (item, index) {
       MessageBox.confirm('确认删除?').then(action => {
         api.handlePost({
-          sid: this.sid,
+          sid: this.userInfo.sid,
           handleType: "deleteComment",
           from: "user",
           postId: item.cid

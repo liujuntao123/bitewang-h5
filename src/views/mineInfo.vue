@@ -10,30 +10,29 @@
         <div class="item">
           <div class="item-label">头像</div>
           <div class="item-value">
-            <img :src="userInfo.avatar" alt="" class="avatar-pic">
+            <img :src="currentInfo.avatar" alt="" class="avatar-pic">
           </div>
         </div>
         <div class="item">
           <div class="item-label">手机号</div>
           <div class="item-value">
-            {{userInfo.mobile}}
+            {{currentInfo.mobile || '-'}}
           </div>
         </div>
         <div class="item">
           <div class="item-label">昵称</div>
           <div class="item-value">
-            {{userInfo.nickname}}
+            {{currentInfo.nickname}}
           </div>
         </div>
         <div class="item">
           <div class="item-label">个人简介</div>
           <div class="item-value">
-            {{userInfo.profile}}
+            {{currentInfo.profile}}
           </div>
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -48,10 +47,16 @@ export default {
   },
   data(){
     return{
-      // nickname:'肯德基',
-      // mobile:'18888888888',
-      // avatar:'https://static001.geekbang.org/resource/image/15/be/1538be68a5f597ab1baf179a4a724ebe.jpg?x-oss-process=image/resize,m_fill,h_212,w_330',
-      // profile:'',
+      currentInfo: {
+        uid: '',
+        nickname: '',
+        avatar: '',
+        profile: '',
+        topicCount: '',
+        commentCount: '',
+        score: '',
+        state: ''
+      }
     }
   },
   computed: {
@@ -59,7 +64,25 @@ export default {
       {userInfo:'userInfo/getUserInfo'}
     )
   },
+  created () {
+    this.uid = this.$route.query.uid || this.userInfo.uid
+    this.getUserInfo()
+  },
   methods:{
+    getUserInfo () {
+      api.userInfo({
+        sid: this.userInfo.sid,
+        uid: this.uid
+      }).then(res=>{
+        this.currentInfo.nickname = res.nickname
+        this.currentInfo.avatar = res.avatar
+        this.currentInfo.profile = res.profile
+        this.currentInfo.topicCount = res.topicCount
+        this.currentInfo.commentCount = res.commentCount
+        this.currentInfo.score = res.score
+        this.currentInfo.state = res.state
+      })
+    },
   }
 }
 </script>

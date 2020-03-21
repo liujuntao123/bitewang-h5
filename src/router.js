@@ -58,23 +58,23 @@ export default new Router({
       component:Search
     },
     {
-      path:'/mine',
-      name:'mine',
+      path:'/user',
+      name:'user',
       component:Mine
     },
     {
-      path:'/mineInfo',
-      name:'mineInfo',
+      path:'/userInfo',
+      name:'userInfo',
       component:MineInfo
     },
     {
-      path:'/myTheme',
-      name:'myTheme',
+      path:'/userTheme',
+      name:'userTheme',
       component:MyTheme
     },
     {
-      path:'/myComment',
-      name:'myComment',
+      path:'/userComment',
+      name:'userComment',
       component:MyComment
     },
     {

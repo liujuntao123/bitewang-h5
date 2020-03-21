@@ -1,44 +1,45 @@
 <template>
   <div class="mine-container">
-    <Header title="我" class="header-fixed" />
+    <Header title="我" class="header-fixed" v-if="isMine"/>
+    <Header :title="currentInfo.nickname" :is-show-back="true"  class="header-fixed" v-else/>
     <div class="mine-content">
-      <div class="avatar" @click="handleMineInfo">
+      <div class="avatar" @click="handleUserInfo">
         <img
-          :src="userInfo.avatar"
+          :src="currentInfo.avatar"
           alt=""
         >
       </div>
-      <div class="name" @click="handleMineInfo">
-        {{ userInfo.nickname }}
+      <div class="name" @click="handleUserInfo">
+        {{ currentInfo.nickname }}
       </div>
       <div class="brief">
-        {{ userInfo.profile }}
+        {{ currentInfo.profile }}
       </div>
       <div class="info">
         <div class="info-item" @click="handleTheme">
-          <p class="info-value">{{ userInfo.topicCount || '0' }}</p>
+          <p class="info-value">{{ currentInfo.topicCount || '0' }}</p>
           <p class="info-title">主题</p>
         </div>
         <div class="info-item" @click="handleComment">
-          <p class="info-value">{{ userInfo.commentCount || '0' }}</p>
+          <p class="info-value">{{ currentInfo.commentCount || '0' }}</p>
           <p class="info-title">评论</p>
         </div>
         <div class="info-item">
-          <p class="info-value">{{ userInfo.score || '0' }}</p>
+          <p class="info-value">{{ currentInfo.score || '0' }}</p>
           <p class="info-title">积分</p>
         </div>
       </div>
-      <div class="list">
+      <div class="list" v-if="isMine">
         <div class="item">检测更新</div>
         <div class="item">联系我们</div>
         <div class="item">关于</div>
       </div>
-      <div class="footer">
+      <div class="footer" v-if="isMine">
         <a href="javascript:;" class="logout" @click="handleLogout">退出登录</a>
       </div>
     </div>
    
-    <TabBar title="我" class="" />
+    <TabBar v-if="isMine"/>
   </div>
 </template>
 
@@ -55,12 +56,31 @@ export default {
   },
   data(){
     return{
+      uid: '',
+      isMine: false, //是否是'我的'
+      currentInfo: {
+        uid: '',
+        nickname: '',
+        avatar: '',
+        profile: '',
+        topicCount: '',
+        commentCount: '',
+        score: '',
+        state: ''
+      }
     }
   },
   computed: {
     ...mapGetters(
       {userInfo:'userInfo/getUserInfo'}
     )
+  },
+  created () {
+    this.uid = this.$route.query.uid || this.userInfo.uid
+    // 通过判断query的id来区分是不是“我的”)
+    if(!this.$route.query.uid){
+      this.isMine = true
+    }
   },
   mounted () {
     this.getUserInfo()
@@ -69,27 +89,30 @@ export default {
     getUserInfo () {
       api.userInfo({
         sid: this.userInfo.sid,
-        uid: this.userInfo.uid
+        uid: this.uid
       }).then(res=>{
-        let info = this.userInfo
-        info.nickname = res.nickname
-        info.avatar = res.avatar
-        info.profile = res.profile
-        info.topicCount = res.topicCount
-        info.commentCount = res.commentCount
-        info.score = res.score
-        info.state = res.state
-        this.$store.dispatch('userInfo/setUserInfo',info)
+        if(this.isMine){
+          let info = {...this.userInfo, res}
+          this.$store.dispatch('userInfo/setUserInfo', info)
+        }
+        this.currentInfo.nickname = res.nickname
+        this.currentInfo.avatar = res.avatar
+        this.currentInfo.profile = res.profile
+        this.currentInfo.topicCount = res.topicCount
+        this.currentInfo.commentCount = res.commentCount
+        this.currentInfo.score = res.score
+        this.currentInfo.state = res.state
+        
       })
     },
-    handleMineInfo () {
-      this.$router.push({path: '/mineInfo'})
+    handleUserInfo () {
+      this.$router.push({path: '/userInfo', query: {uid: this.uid, name: this.currentInfo.nickname}})
     },
     handleTheme () {
-      this.$router.push({path: '/myTheme', query: {uid: this.userInfo.uid}})
+      this.$router.push({path: '/userTheme', query: {uid: this.uid, name: this.currentInfo.nickname}})
     },
     handleComment () {
-      this.$router.push({path: '/myComment', query: {uid: this.userInfo.uid}})
+      this.$router.push({path: '/userComment', query: {uid: this.uid, name: this.currentInfo.nickname}})
     },
     handleLogout () {
       console.log('退出登录')
