@@ -42,8 +42,9 @@ export default {
     justify-content: center;
     position: relative;
     .logo-container {
-      width: 158px;
-      height: 76px;
+      width: 204px;
+      height: 111px;
+      margin-bottom: 55px;
       .logo-img {
         width: 100%;
       }

@@ -133,7 +133,8 @@ export default {
       this.$router.push('posting')
     },
     goPostDetail(item) {
-      this.$router.push({name:'postdetails',params:{itemDetail: item}})
+      this.$store.dispatch('baInfo/setPostItem', item)
+      this.$router.push('postdetails')
     }
   }
 }

@@ -106,7 +106,6 @@ export default {
     return {
       headName: '帖子详情',
       hasSupport: false,
-      item: {},
       commentText: '',
       commentList: [],
       cid: -1,
@@ -115,15 +114,15 @@ export default {
   },
   inject: ['reload'],
   computed: {
-    ...mapGetters(
-      {sid: 'userInfo/getSid'}
-    )
+    ...mapGetters({
+      sid: 'userInfo/getSid',
+      item: 'baInfo/getPostItem'
+    })
   },
   components: {
     Header
   },
   mounted() {
-    this.item = this.$route.params.itemDetail
     this.getCommentList()
   },
   methods: {
