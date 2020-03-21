@@ -9,21 +9,48 @@
       <div
         class="list-container"
         v-infinite-scroll="loadMore"
-        infinite-scroll-disabled="loading"
+        infinite-scroll-disabled="isLoading"
         infinite-scroll-distance="10"
       >
-        <div class="list-item" v-for="(item, index) in lists" :key="index">
-          <PostsItem :item="item" @goPostDetail="goPostDetail(item)" />
+        <div  
+          class="list-item"
+          v-for="(item, index) in lists" 
+          :key="index"
+        >
+          <PostsItem 
+            :item="item" 
+            @goPostDetail="goPostDetail(item)"
+          />
         </div>
       </div>
-      <div class="loading-more" v-if="isLoading">
-        <mt-spinner type="fading-circle" :size="22" color="#888" class="loading-more-icon"/>
+      <div 
+        class="loading-more" 
+        v-if="isLoading" 
+      >
+        <mt-spinner 
+          type="fading-circle" 
+          :size="22" 
+          color="#888" 
+          class="loading-more-icon"
+        />
         <span class="loading-more-txt">加载中...</span>
       </div>
-      <div class="loading-all" v-if="total > 0 && lists.length >= total">没有更多了~</div>
+      <div 
+        class="loading-all" 
+        v-if="(!isLoading && lists.length === 0) || (!isLoading && !hasNewList)"
+      >
+        没有更多了~
+      </div>
     </div>
-    <div class="click-post-container" @click="goPostingPage">
-      <img class="new-post-img" src="./../images/new_post.png" alt="">
+    <div 
+      class="click-post-container" 
+      @click="goPostingPage"
+    >
+      <img 
+        class="new-post-img" 
+        src="./../images/new_post.png" 
+        alt=""
+      >
     </div>
   </div>
 </template>
@@ -32,15 +59,21 @@
 import api from '@/api'
 import Header from './../components/header'
 import PostsItem from './../components/postsitem'
+import dataUtil from '@/utils/data'
 import { mapGetters } from 'vuex'
+import { Toast } from 'mint-ui'
+import { setTimeout } from 'timers';
 
 
 export default {
   data() {
     return {
       isLoading: false,
+      index: 0,
       total: 0,
-      lists: []
+      forceRefresh: false,
+      lists: [],
+      hasNewList: true
     }
   },
   computed: {
@@ -52,36 +85,47 @@ export default {
   },
   mounted() {
     document.title = this.headName
-    this.getPostsList()
+    this.$route.params.postRefreshPostList ? this.forceRefresh = true : this.forceRefresh = false
   },
   components: {
     Header,
     PostsItem
   },
   methods: {
-    getPostsList() {
-      let getListsObj = {
-        sid: this.sid,
-        bid: this.bid,
-        index: 0,
-        forceRefresh: false
-      }
-      api.BaTopicList(getListsObj).then(res => {
-        if (res.result === 0) {
-          this.lists = res.topicList
-        }
-      })
-    },
     loadMore() {
-      this.isLoading = true
-      this.total = 30
-      if (this.lists.length > this.total) {
-        this.isLoading = false
-        return
-      } else {
+      if (this.hasNewList) {
+        this.isLoading = true
+        let getListsObj = {
+          sid: this.sid,
+          bid: this.bid,
+          index: this.index,
+          forceRefresh: this.forceRefresh
+        }
         setTimeout(() => {
-         
-          this.loading = false;
+          api.BaTopicList(getListsObj).then(res => {
+            this.forceRefresh = false
+            if (res.result === 0) {
+              if (res.topicList.length > 0) {
+                if (this.lists.length > 0) {
+                  this.lists = dataUtil.jsonDuplicateRemoval(this.lists, res.topicList)
+                  this.index += 1
+                  this.isLoading = false
+                } else {
+                  res.topicList.forEach(e => {
+                    this.lists.push(e)
+                  })
+                  this.index += 1
+                  this.isLoading = false
+                }
+              } else {
+                this.isLoading = false
+                this.hasNewList = false
+              }
+            } else {
+              this.isLoading = false
+              Toast(res.message)
+            }
+          })
         }, 2000)
       }
     },

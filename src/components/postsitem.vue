@@ -1,7 +1,7 @@
 <template>
   <div class="item-box" @click="goPostDetail">
     <div class="item-header">
-      <div class="item-img-box">
+      <div class="item-img-box" @click.stop="goUserInfo(item.uid)">
         <img class="item-img-img" :src="item.avatar" alt="">
       </div>
       <div class="item-post-info">
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="item-post-is-top">
-        <img class="post-is-top-img" src="./../images/top.png" v-show="item.isTop" alt="">
+        <img class="post-is-top-img" src="./../images/top.png" v-show="(item.state&8)" alt="">
       </div>
       <div class="item-support-box">
         <img class="item-support-img" @click="supportGood" v-if="!hasSupport" src="./../images/good1.png" alt="" >
@@ -68,6 +68,9 @@ export default {
     supportGood() {
     },
     noSupportGood() {
+    },
+    goUserInfo(uid) {
+      this.$router.push({path: '/user', query: {uid: uid}})
     },
     goPostDetail() {
       this.$emit("goPostDetail")

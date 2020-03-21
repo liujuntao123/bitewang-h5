@@ -4,11 +4,11 @@
       class="header-fixed"
       :is-show-back="true"
       :title="headTitle"
-      :isShowPostingBtn="true"
+      :is-show-posting-btn="true"
       @submitPosting="submitPosting"
     />
     <div class="posting-container">
-      <textarea class="textaret-posting" v-model="textModel" name="" id="" placeholder="发表你的高见..."></textarea>
+      <textarea class="textaret-posting" maxlength="500" v-model="textModel" name="" id="" placeholder="发表你的高见..."></textarea>
     </div>
   </div>
 </template>
@@ -53,10 +53,13 @@ export default {
       api.newTopic(newTopicObj).then(res => {
         this.textModel = ''
         if(res.result === 0) {
-          Toast('发布成功')
+          Toast({
+            message: '发布成功',
+            duration: 2000
+          })
           setTimeout(() => {
             this.$router.replace({name:'postslist',params:{postRefreshPostList: true}})
-          },1500)
+          },2000)
         } else {
           Toast(res.message)
         }

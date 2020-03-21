@@ -8,7 +8,10 @@
     <div class="post-detail-container">
       <div class="item-box">
         <div class="item-header">
-          <div class="item-img-box">
+          <div 
+            class="item-img-box" 
+            @click="goUserInfo(item.uid)"
+          >
             <img 
               class="item-img-img"
               :src="item.avatar" 
@@ -49,9 +52,16 @@
             v-if="item.commentCount > 0"
           >
             <div class="comment-less-box">
-              <div class="comment-less-for-box" v-for="(comment, index) in commentList" :key="index">
+              <div 
+                class="comment-less-for-box" 
+                v-for="(comment, index) in commentList" 
+                :key="index"
+              >
                 <div class="comment-item">
-                  <span class="comment-name">{{ comment.nickname }}:</span><span class="comment-content">{{ comment.content }}</span><span class="comment-time">{{ showTime(comment.createdAt, 'YYYY-MM-DD') }}</span>
+                  <span 
+                    class="comment-name" 
+                    @click="goUserInfo(comment.uid)"
+                  >{{ comment.nickname }}:</span><span class="comment-content">{{ comment.content }}</span><span class="comment-time">{{ showTime(comment.createdAt, 'YYYY-MM-DD') }}</span>
                 </div>
               </div>
             </div>
@@ -59,7 +69,7 @@
         </div>
       </div>
       <div 
-        v-if="item.commentCount > 2" 
+        v-if="hasMoreComment" 
         @click="clickShowMore" 
         class="show-more-comment"
       >
@@ -98,9 +108,12 @@ export default {
       hasSupport: false,
       item: {},
       commentText: '',
-      commentList: []
+      commentList: [],
+      cid: -1,
+      hasMoreComment: false
     }
   },
+  inject: ['reload'],
   computed: {
     ...mapGetters(
       {sid: 'userInfo/getSid'}
@@ -121,20 +134,33 @@ export default {
     },
     noSupportGood() {
     },
+    goUserInfo(uid) {
+      this.$router.push({path: '/user', query: {uid: uid}})
+    },
     getCommentList() {
       if (this.item.commentCount > 0) {
         let getCommentObj = {
-        sid: this.sid,
-        tid: this.item.tid,
-        cid: -1
-      }
-      api.TopicCommentList(getCommentObj).then(res => {
-        if (res.result === 0) {
-          this.commentList = res.commentList
-        } else {
-          Toast(res.message)
+          sid: this.sid,
+          tid: this.item.tid,
+          cid: this.cid
         }
-      })
+        api.TopicCommentList(getCommentObj).then(res => {
+          if (res.result === 0) {
+            if (res.commentList.length > 0) {
+              this.commentList = this.commentList.concat(res.commentList)
+              this.cid = res.commentList[res.commentList.length-1].cid
+              if (res.commentList.length < 10) {
+                this.hasMoreComment = false
+              } else {
+                this.hasMoreComment = true
+              }
+            } else {
+              this.hasMoreComment = false
+            }
+          } else {
+            Toast(res.message)
+          }
+        })
       }
     },
     submitComment() {
@@ -150,18 +176,20 @@ export default {
       this.commentText = ''
       api.NewComment(commentObj).then(res => {
         if(res.result === 0) {
-          Toast('评论成功')
+          Toast({
+            message: '评论成功',
+            duration: 2000
+          })
           setTimeout(() => {
-            this.$router.replace({name:'postslist',params:{postRefreshPostList: true}})
-          },1500)
+            this.reload();
+          },2000)
         } else {
           Toast(res.message)
         }
-        console.log('comment res:', res)
       })
     },
     clickShowMore() {
-
+      this.getCommentList()
     }
   }
 }
@@ -253,6 +281,7 @@ export default {
       .show-more-comment {
         text-align: center;
         color: #4299e5;
+        padding-bottom: 10px;
       }
     }
     .post-comment-container {
@@ -274,8 +303,10 @@ export default {
       }
       input {
         border-width: 0;
+        font-size: 14px;
       }
       .comment-submit {
+        font-size: 16px;
         width: 40px;
         height: 100%;
         text-align: center;
