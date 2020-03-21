@@ -6,11 +6,80 @@
       :title="headName"
     />
     <div class="post-detail-container">
-      <PostsItem :item="item" />
+      <div class="item-box">
+        <div class="item-header">
+          <div class="item-img-box">
+            <img 
+              class="item-img-img"
+              :src="item.avatar" 
+              alt=""
+            >
+          </div>
+          <div class="item-post-info">
+            <div class="item-post-name">
+              {{ item.nickname }}
+            </div>
+            <div class="item-post-time">
+              {{ showTime(item.createdAt, 'YYYY-MM-DD HH:mm:ss') }}
+            </div>
+          </div>
+          <div class="item-support-box">
+            <img
+              class="item-support-img" 
+              @click="supportGood" 
+              v-if="!hasSupport" 
+              src="./../images/good1.png" 
+              alt="" 
+            >
+            <img 
+              class="item-support-img" 
+              @click="noSupportGood" 
+              v-else 
+              src="./../images/good2.png" 
+              alt=""
+            >
+          </div>
+        </div>
+        <div class="item-main">
+          <div class="item-content">
+            {{ item.summary }}
+          </div>
+          <div
+            class="item-comment-box" 
+            v-if="item.commentCount > 0"
+          >
+            <div class="comment-less-box">
+              <div class="comment-less-for-box" v-for="(comment, index) in commentList" :key="index">
+                <div class="comment-item">
+                  <span class="comment-name">{{ comment.nickname }}:</span><span class="comment-content">{{ comment.content }}</span><span class="comment-time">{{ showTime(comment.createdAt, 'YYYY-MM-DD') }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div 
+        v-if="item.commentCount > 2" 
+        @click="clickShowMore" 
+        class="show-more-comment"
+      >
+        查看更多
+      </div>
     </div>
     <div class="post-comment-container">
-      <input class="comment-input" v-model="commentText" type="text">
-      <div class="comment-submit" @click="submitComment">发表</div>
+      <input 
+        class="comment-input" 
+        maxlength="50" 
+        v-model="commentText" 
+        placeholder="发表你的评论" 
+        type="text"
+      >
+      <div 
+        class="comment-submit" 
+        @click="submitComment"
+      >
+        发表
+      </div>
     </div>
   </div>
 </template>
@@ -18,7 +87,7 @@
 <script>
 import api from '@/api'
 import Header from '@/components/header'
-import PostsItem from '@/components/postsitem'
+import moment from '@/utils/moment'
 import { mapGetters } from 'vuex'
 import { Toast } from 'mint-ui'
 
@@ -26,8 +95,10 @@ export default {
   data() {
     return {
       headName: '帖子详情',
+      hasSupport: false,
       item: {},
-      commentText: ''
+      commentText: '',
+      commentList: []
     }
   },
   computed: {
@@ -36,13 +107,36 @@ export default {
     )
   },
   components: {
-    Header,
-    PostsItem
+    Header
   },
   mounted() {
     this.item = this.$route.params.itemDetail
+    this.getCommentList()
   },
   methods: {
+    showTime(timestamp, format) {
+      return new moment(timestamp).format(format)
+    },
+    supportGood() {
+    },
+    noSupportGood() {
+    },
+    getCommentList() {
+      if (this.item.commentCount > 0) {
+        let getCommentObj = {
+        sid: this.sid,
+        tid: this.item.tid,
+        cid: -1
+      }
+      api.TopicCommentList(getCommentObj).then(res => {
+        if (res.result === 0) {
+          this.commentList = res.commentList
+        } else {
+          Toast(res.message)
+        }
+      })
+      }
+    },
     submitComment() {
       if(this.commentText.trim().length === 0) {
         Toast('评论内容不能为空')
@@ -65,6 +159,9 @@ export default {
         }
         console.log('comment res:', res)
       })
+    },
+    clickShowMore() {
+
     }
   }
 }
@@ -88,6 +185,75 @@ export default {
       height: calc(100% - 90px);
       box-sizing: border-box;
       overflow: auto;
+      .item-box {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        .item-header {
+          display: flex;
+          padding: 6px 20px 6px 6px;
+          align-items: center;
+          .item-img-box {
+            width: 30px;
+            height: 30px;
+            .item-img-img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .item-post-info {
+            font-size: 16px;
+            margin-left: 6px;
+            flex: 1;
+            .item-post-name {
+            }
+            .item-post-time {
+              color: #888;
+            }
+          }
+          .item-support-box {
+            width: 24px;
+            height: 24px;
+            padding: 6px 14px 0 0;
+            .item-support-img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+        .item-main {
+          font-size: 14px;
+          display: flex;
+          flex-direction: column;
+          padding: 0 20px 10px 42px;
+          .item-content {
+            margin-bottom: 6px;
+            font-size: 16px;
+          }
+          .item-comment-box {
+            .comment-less-box {
+              .comment-less-for-box {
+                .comment-item {
+                  .comment-name {
+                    color: #4299e5;
+                  }
+                  .comment-content {
+                    padding: 0 12px 0 6px;
+                  }
+                  .comment-time {
+                    color: #888;
+                    white-space: nowrap;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .show-more-comment {
+        text-align: center;
+        color: #4299e5;
+      }
     }
     .post-comment-container {
       position: fixed;
@@ -105,6 +271,9 @@ export default {
         height: 100%;
         outline: none;
         vertical-align: middle;
+      }
+      input {
+        border-width: 0;
       }
       .comment-submit {
         width: 40px;

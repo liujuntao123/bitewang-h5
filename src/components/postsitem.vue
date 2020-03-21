@@ -31,10 +31,10 @@
         <div class="comment-less-box">
           <div class="comment-less-for-box">
             <div class="comment-item">
-              <span class="comment-name">{{ item.comment1 }}:</span>
+              <span class="comment-name">{{ item.comment1.slice(0, item.comment1.indexOf(':')) }}:</span>{{ item.comment1.slice(item.comment1.indexOf(':')+1) }}
             </div>
             <div class="comment-item" v-if="item.comment2">
-              <span class="comment-name">{{ item.comment2 }}:</span>
+              <span class="comment-name">{{ item.comment2.slice(0, item.comment2.indexOf(':')) }}:</span>{{ item.comment2.slice(item.comment2.indexOf(':')+1) }}
             </div>
           </div>
           <div v-if="item.commentCount > 2" @click="clickShowMore" class="show-more-comment">{{"查看全部("+item.commentCount+"评论)"}}</div>
@@ -73,7 +73,6 @@ export default {
       this.$emit("goPostDetail")
     },
     clickShowMore() {
-      
     }
   }
 }
