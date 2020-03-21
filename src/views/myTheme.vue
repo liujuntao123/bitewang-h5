@@ -18,7 +18,7 @@
               <p class="created-at">{{timeFormat(item.createdAt)}}</p>
             </div>
             <div class="item-top" v-if="item.isTop"></div>
-            <div class="item-delete" @click="handleDelete(item, index)"></div>
+            <div class="item-delete" @click="handleDelete(item, index)" v-if="isOwner"></div>
           </div>
           <div class="item-content">
             {{ item.summary }}
@@ -55,23 +55,27 @@ export default {
       beginTid: -1,
       list: [],
       uid: '',
-      name: '我'
+      name: '我',
+      isOwner: false, //是否是用户本身
     }
   },
   computed: {
     ...mapGetters(
-      {sid:'userInfo/getSid'}
+      {userInfo:'userInfo/getUserInfo'}
     )
   },
   created () {
-    this.uid = this.$route.query.uid,
+    this.uid = this.$route.query.uid || this.userInfo.uid
     this.name = this.$route.query.name || '我'
+    if(this.uid == this.userInfo.uid){
+      this.isOwner = true
+    }
   },
   mounted () {
     //手动发主题贴
-    // for(let i = 0; i< 50; i++){
+    // for(let i = 0; i< 40; i++){
     //   api.newTopic({
-    //     sid: this.sid,
+    //     sid: this.userInfo.sid,
     //     bid: 1,
     //     content: "pipi皮卡丘发的主题"+i
     //   }).then(res=>{
@@ -84,11 +88,10 @@ export default {
       if(this.beginTid !== 0){
         this.loading = true;
         api.userTopicList({
-          sid: this.sid,
+          sid: this.userInfo.sid,
           uid: this.uid,
           beginTid: this.beginTid
         }).then(res=>{
-          // let newList = res.topicList
           let newList = res.topicList.filter(item => item.state == 0)
           this.list = this.list.concat(newList)
           this.beginTid = res.preBeginTid
@@ -101,7 +104,7 @@ export default {
     handleDelete (item, index) {
       MessageBox.confirm('确认删除?').then(action => {
         api.handlePost({
-          sid: this.sid,
+          sid: this.userInfo.sid,
           handleType: "deleteTopic",
           from: "user",
           postId: item.tid

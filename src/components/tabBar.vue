@@ -20,7 +20,7 @@ export default {
       path: '',
       list: [
         {name: '币吧', url: '/balist',  icon: biba1, activeIcon: biba2},
-        {name: '我', url: '/mine',  icon: me1, activeIcon: me2},
+        {name: '我', url: '/user',  icon: me1, activeIcon: me2},
       ]
     }
   },
