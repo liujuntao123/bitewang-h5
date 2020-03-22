@@ -67,6 +67,7 @@
         this.$router.go(-1);
       },
       handleSearch(){
+        this.$router.push('search')
       },
       posting() {
         this.$emit("submitPosting")
