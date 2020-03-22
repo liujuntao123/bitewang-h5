@@ -344,8 +344,7 @@ export default {
       position: fixed;
       left: 0;
       bottom: 1px;
-      border-bottom: 0;
-      border-top: 1px solid #aaa;
+      border-top: 1px solid #bbb;
       width: 100%;
       height: 40px;
       line-height: 40px;

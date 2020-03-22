@@ -34,13 +34,13 @@ export default {
 
 <style lang="less" scoped>
   .page-cover-page {
-    height: 100vh;
-    background-color: #fff;
+    position: absolute;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative;
     .logo-container {
       width: 204px;
       height: 111px;
@@ -53,7 +53,7 @@ export default {
       width: 346px;
       height: 45px;
       position: absolute;
-      bottom: 10px;
+      bottom: 15px;
       box-sizing: border-box;
       display: flex;
       justify-content: center;
