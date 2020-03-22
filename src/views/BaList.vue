@@ -4,7 +4,7 @@
       :is-show-back="false" 
       :is-show-diy="false"
       :isShowSearch="true"
-      :title="'币吧'"
+      :title="'比特汪'"
       class="header-fixed">
     </Header>
   <div class="item-container" @click="tapAll" >
@@ -109,8 +109,10 @@ export default {
         return Promise.resolve()
       }
       return api.getBaList({sid:this.sid}).then(res=>{
-        this.all_list=res.baList
-        storage.setToLocalStorage(this.all_list, 'baList', this.expire_time)
+        if(res.result==0){
+          this.all_list=res.baList
+          storage.setToLocalStorage(this.all_list, 'baList', this.expire_time)
+        }
       })
       
     },
@@ -296,6 +298,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// .header-fixed{
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//   }
 
 .item-container{
   display: flex;

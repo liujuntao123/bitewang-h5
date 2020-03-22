@@ -20,10 +20,10 @@
             </div>
             <div class="item-delete" @click="handleDelete(item, index)"  v-if="isOwner"></div>
           </div>
-          <div class="item-content">
+          <div class="item-content" @click="handleTheme(item)">
             {{item.summary}}
           </div>
-          <div class="item-foot">
+          <div class="item-foot" @click="handleTheme(item)">
             {{item.tSummary}}
           </div>
         </div>
@@ -120,8 +120,11 @@ export default {
         } 
       });
     },
+    handleTheme (item) {
+      this.$router.push({path: '/postdetails', query: {tid: item.tid}})
+    },
     timeFormat(timestamp) {
-      return new moment(timestamp).format('YYYY-MM-DD')
+      return new moment(timestamp).format('YYYY-MM-DD HH:mm:ss')
     },
   }
 }
@@ -181,6 +184,7 @@ export default {
     }
     .item-content{
       padding: 5px 0;
+      .ellipsis();
       
     }
     .item-foot{

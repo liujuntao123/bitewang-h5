@@ -7,6 +7,7 @@
         <img
           :src="currentInfo.avatar"
           alt=""
+          draggable="false"
         >
       </div>
       <div class="name" @click="handleUserInfo">
