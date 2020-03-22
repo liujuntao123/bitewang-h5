@@ -157,12 +157,11 @@ export default {
   .post-list-container {
     margin-top: 50px;
     height: calc(100% - 50px);
-    padding-bottom: 5px;
+    padding-bottom: 50px;
     box-sizing: border-box;
     overflow: auto;
     .list-container {
       background: #e8e8e8;
-      padding-bottom: 10px;
       word-break: break-all;
     }
     .loading-more {
@@ -177,7 +176,6 @@ export default {
         line-height: 30px;
         padding-left: 10px;
         color: #888;
-        padding-bottom: 50px;
       }
     }
     .loading-all {
@@ -185,7 +183,7 @@ export default {
       line-height: 30px;
       text-align: center;
       color: #888;
-      padding: 10px 0;
+      padding-bottom: 10px;
     }
   }
   .click-post-container {
