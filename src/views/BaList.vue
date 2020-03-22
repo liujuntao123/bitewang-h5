@@ -1,12 +1,13 @@
 <template>
 <div>
-  <Header 
+  <!-- <Header 
       :is-show-back="false" 
       :is-show-diy="false"
       :isShowSearch="true"
       :title="'比特汪'"
       class="header-fixed">
-    </Header>
+    </Header> -->
+    <search-bar/>
   <div class="item-container" @click="tapAll" >
     <div class="item dropzone" v-for="(item, index) in all_list" 
     :key="index" 
@@ -49,11 +50,13 @@ const { expire_time } = config
 import { mapGetters } from 'vuex'
 import storage from '@/utils/storage'
 import TabBar from '@/components/tabBar'
+import SearchBar from '@/components/searchbar'
 
 export default {
   components: {
     TabBar,
-    Header
+    Header,
+    SearchBar
   },
   data(){
     return {
@@ -312,7 +315,7 @@ export default {
   align-content: flex-start;
   height: 100vh;
   position: relative;
-  background: #dddddd;
+  background: #e8e8e8;
 }
 .on-enter{
   opacity: 0;
@@ -353,7 +356,7 @@ export default {
   // border: 1px solid #888888;
   position: relative;
   // margin-right: 10px;
-  margin-top: 10px;
+  margin-top: 5px;
   box-shadow: 0px 0px 2px #888888;
   font-size: 12px;
   // width: 80px;

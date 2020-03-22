@@ -19,7 +19,7 @@ export default {
     return {
       path: '',
       list: [
-        {name: '币吧', url: '/balist',  icon: biba1, activeIcon: biba2},
+        {name: '留言板', url: '/balist',  icon: biba1, activeIcon: biba2},
         {name: '我', url: '/user',  icon: me1, activeIcon: me2},
       ]
     }
@@ -66,7 +66,7 @@ export default {
       height: 14px;
       line-height: 14px;
       &.active{
-        color: #de4d53
+        color: #cd5c5c
       }
     }
   }

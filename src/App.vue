@@ -41,4 +41,7 @@ export default {
   p{
     margin: 0;
   }
+  ::-webkit-input-placeholder{
+    color:#b8b8b8;
+  }
 </style>

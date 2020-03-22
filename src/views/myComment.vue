@@ -1,10 +1,10 @@
 <template>
   <div class="my-comment-container">
-    <Header 
+    <!-- <Header 
       :is-show-back="true" 
       :title="name+'的评论'"
       class="header-fixed"
-    />
+    /> -->
     <div class="content">
       <div 
         class="list"
@@ -24,7 +24,7 @@
             {{item.summary}}
           </div>
           <div class="item-foot" @click="handleTheme(item)">
-            {{item.tSummary}}
+            主题：{{item.tSummary}}
           </div>
         </div>
       </div>
@@ -69,6 +69,7 @@ export default {
     if(this.uid == this.userInfo.uid){
       this.isOwner = true
     }
+    document.title=(this.name||'我')+'的评论'
   },
   mounted () {
     //手动发评论
@@ -149,8 +150,9 @@ export default {
     width: 100%;
     height: 100%;
     .content{
-      margin-top: 50px;
-      height: calc(100% - 50px);
+      // margin-top: 50px;
+      // height: calc(100% - 50px);
+      height: calc(100%);
       padding-bottom: 10px;
       box-sizing: border-box;
       overflow: auto;
@@ -165,7 +167,7 @@ export default {
       border: 1px solid #c5c5c5;
       background: #fff;
       padding: 10px 15px;
-      margin-bottom: 10px;
+      margin-bottom: 7px;
     }
     .item-head{
       display: flex;
@@ -174,6 +176,7 @@ export default {
       }
       .created-at{
         color: #888;
+        font-size: 12px;
       }
       .item-delete{
         width: 22px;

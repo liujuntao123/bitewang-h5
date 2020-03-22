@@ -1,10 +1,10 @@
 <template>
   <div class="mine-info-container"> 
-    <Header 
+    <!-- <Header 
       :is-show-back="true" 
       title="个人资料"
       class="header-fixed"
-    />
+    /> -->
     <div class="content">
       <div class="list">
         <div class="item">
@@ -68,6 +68,7 @@ export default {
   created () {
     this.uid = this.$route.query.uid || this.userInfo.uid
     this.getUserInfo()
+    document.title='个人资料'
   },
   methods:{
     getUserInfo () {
@@ -102,7 +103,7 @@ export default {
   .mine-info-container{
     font-size: 14px;
     .content{
-      margin-top: 50px;
+      // margin-top: 50px;
     }
     .avatar-pic{
       width: 40px;

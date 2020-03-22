@@ -1,7 +1,7 @@
 <template>
   <div class="mine-container">
-    <Header title="我" class="header-fixed" v-if="isMine"/>
-    <Header :title="currentInfo.nickname" :is-show-back="true"  class="header-fixed" v-else/>
+    <!-- <Header title="我" class="header-fixed" v-if="isMine"/>
+    <Header :title="currentInfo.nickname" :is-show-back="true"  class="header-fixed" v-else/> -->
     <div class="mine-content">
       <div class="avatar" @click="handleUserInfo">
         <img
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="list" v-if="isMine">
-        <div class="item">检测更新</div>
+        <!-- <div class="item">检测更新</div> -->
         <div class="item">联系我们</div>
         <div class="item">关于</div>
       </div>
@@ -49,6 +49,7 @@ import Header from '@/components/header'
 import TabBar from '@/components/tabBar'
 import api from '@/api'
 import { mapGetters } from 'vuex'
+import {MessageBox} from 'mint-ui'
 
 export default {
   components: {
@@ -84,11 +85,13 @@ export default {
     }
   },
   mounted () {
-    this.getUserInfo()
+    this.getUserInfo().then(res=>{
+    document.title=this.isMine?'我':this.currentInfo.nickname
+    })
   },
   methods:{
     getUserInfo () {
-      api.userInfo({
+      return api.userInfo({
         sid: this.userInfo.sid,
         uid: this.uid
       }).then(res=>{
@@ -120,9 +123,15 @@ export default {
     },
     handleLogout () {
       console.log('退出登录')
-      // 移除所有
-      localStorage.clear();
-      window.location.reload();
+      MessageBox.confirm('确认退出登录吗?').then(()=>{
+        // 移除所有缓存，只留deviceId
+        const deviceId=localStorage.getItem('deviceId')
+        localStorage.clear();
+        if(deviceId){
+          localStorage.setItem('deviceId',deviceId)
+        }
+        window.location.reload();
+      })
     }
   }
 }
@@ -138,7 +147,7 @@ export default {
   .mine-container{
     font-size: 14px;
     .mine-content{
-      margin: 50px 0;
+      // margin: 50px 0;
       padding: 10px 0;
       word-break: break-all;
     }
@@ -158,7 +167,7 @@ export default {
     .brief{
       font-size: 13px;
       color: #757575;
-      padding: 10px 45px 20px 45px;
+      padding: 20px 45px 20px 45px;
     }
     .info{
       overflow: hidden;
@@ -196,12 +205,13 @@ export default {
       padding: 30px 10px 10px 10px;
     }
     .logout{
+      font-size: 16px;
       display: block;
       height: 50px;
       line-height: 50px;
       text-align: center;
       color: #fff;
-      background: #de4d53;
+      background: #cd5c5c;
       border-radius: 5px;
       -webkit-touch-callout:none;
       -webkit-user-select:none;

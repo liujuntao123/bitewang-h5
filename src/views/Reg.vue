@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Header 
+    <!-- <Header 
       class="header-fixed" 
       :is-show-back="true" 
       :title="'填写用户信息'"
-    />
+    /> -->
     <div class="input-box">
       <i class="input-icon user"></i>
     <input class="text-input" v-model="nickname" placeholder="输入昵称" type="text">
@@ -98,24 +98,24 @@ export default {
     display: inline-block;
     position: absolute;
     // left: 0;
-    top: 12px;
-    width: 30px;
-    height: 30px;
-    background-size: 30px 30px;
+    top: 16px;
+    width: 20px;
+    height: 25px;
+    background-size: 20px 25px;
       &.right{
         right: 10px;
       }
     &.user{
-      background-image:url(../images/user.png);
+      background-image:url(../images/name.png);
     }
     &.lock{
-      background-image: url(../images/lock.png);
+      background-image: url(../images/pwd.png);
     }
     &.eye{
-      background-image:url(../images/eye-fill.png);
+      background-image:url(../images/eye_close.png);
     }
     &.eye-close{
-      background-image:url(../images/eye-close-fill.png);
+      background-image:url(../images/eye_open.png);
     }
   }
 }
@@ -123,9 +123,9 @@ export default {
   box-sizing: border-box;
   width: 100%;
   padding: 10px;
-  padding-left: 40px;
+  padding-left: 30px;
   border: none;
-  border-bottom: 3px solid #de4d53;
+  border-bottom: 3px solid #cd5c5c;
   font-size: 16px;
   &:focus{
     outline: none;
@@ -139,10 +139,10 @@ export default {
     line-height: @height;
     text-align: center;
     color: #fff;
-    background: #de4d53;
+    background: #cd5c5c;
     border-radius: 5px;
+    font-size: 16px;
   }
-
 }
 .forget-pwd{
   text-align: center;

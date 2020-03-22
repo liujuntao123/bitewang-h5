@@ -1,6 +1,6 @@
 <template>
   <div class="search-container">
-    <Header 
+    <!-- <Header 
       :is-show-back="true" 
       :is-show-diy="true"
       class="header-fixed">
@@ -8,12 +8,13 @@
         <input type="text" placeholder="" class="search-input" v-model="searchWorld">
         <div class="search-btn" @click="handleSearch">搜索</div>
       </div>
-    </Header>
+    </Header> -->
+    <search-bar :isOnSearch="true" @handleSearch="handleSearch"/>
     <div class="content">
       <div class="list">
         <div class="item" v-for="(item, index) in list" :key="index" @click="handleAdd(item)">{{item.name}}</div>
       </div>
-      <p class="search-tip">没有搜到想要到结果？<span class="search-apply">申请创建新吧</span></p>
+      <p v-if="isOnSearch&&list.length==0" class="search-tip">没有搜到想要到结果？<span class="search-apply">申请创建新吧</span></p>
     </div>
   </div>
 </template>
@@ -28,16 +29,19 @@ import config from '@/config'
 import data from '@/utils/onlineconfig'
 const { getOnlineConfig, findBlacklist } = data
 const { expire_time } = config
+import SearchBar from '@/components/searchbar'
 
 export default {
   components: {
-    Header
+    Header,
+    SearchBar
   },
   data () {
     return {
       searchWorld: '',
       list: [],
-      baListId: []  //个人已存在的ba列表
+      baListId: [],  //个人已存在的ba列表
+      isOnSearch:false
     }
   },
   computed: {
@@ -53,8 +57,8 @@ export default {
   },
   methods: {
     // 搜索
-    handleSearch () {
-      this.search()
+    handleSearch (keyword) {
+      this.search(keyword)
     },
     // 获取个人币吧
     getBaList() {
@@ -76,11 +80,13 @@ export default {
       }
       
     },
-    search () {
+    search (keyword) {
       api.getBaList({
         sid: this.sid,
-        keyword: this.searchWorld
+        // keyword: this.searchWorld
+        keyword
       }).then(res=>{
+        this.isOnSearch=true
         this.list = res.baList || []
       })
     },
@@ -124,7 +130,7 @@ export default {
     width: 100%;
     height: 100%;
     .content{
-      margin-top: 50px;
+      // margin-top: 50px;
     }
     .search-bar{
       display: flex;

@@ -85,11 +85,12 @@
     display: flex;
     color: #fff;
     position: relative;
-    background: #de4d53;
+    background: #cd5c5c;
     height: 50px;
     line-height: 50px;
     padding: 0 15px;
     box-sizing: border-box;
+    font-size: 18px;
     &.has-back{
       // padding-left: 3rem;
     }

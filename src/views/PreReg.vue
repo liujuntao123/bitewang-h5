@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Header 
+    <!-- <Header 
       class="header-fixed" 
       :is-show-back="true" 
       :title="'注册新用户'"
-    />
+    /> -->
     <div class="input-box">
       <i class="input-icon mobile"></i>
     <input class="text-input" v-model="phone" placeholder="输入手机号" type="text">
@@ -25,9 +25,9 @@
     <div class="btn-box">
       <div class="btn" @click="handleSubmit">确定</div>
     </div>
-    <div class="forget-pwd">
+    <!-- <div class="forget-pwd">
       <span class="link">收不到验证码?</span>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -155,9 +155,9 @@ export default {
     position: absolute;
     // left: 0;
     top: 15px;
-    width: 30px;
-    height: 30px;
-    background-size: 30px 30px;
+    width: 20px;
+    height: 25px;
+    background-size: 20px 25px;
       &.right{
         right: 10px;
       }
@@ -165,13 +165,13 @@ export default {
       background-image:url(../images/mobile.png);
     }
     &.info{
-      background-image: url(../images/info-circle.png);
+      background-image: url(../images/vcode.png);
     }
     &.eye{
-      background-image:url(../images/eye-fill.png);
+      background-image:url(../images/eye_close.png);
     }
     &.eye-close{
-      background-image:url(../images/eye-close-fill.png);
+      background-image:url(../images/eye_open.png);
     }
   }
 }
@@ -179,9 +179,9 @@ export default {
   box-sizing: border-box;
   width: 100%;
   padding: 10px;
-  padding-left: 40px;
+  padding-left: 30px;
   border: none;
-  border-bottom: 3px solid #de4d53;
+  border-bottom: 3px solid #cd5c5c;
   font-size: 16px;
   &:focus{
     outline: none;
@@ -195,8 +195,9 @@ export default {
     line-height: @height;
     text-align: center;
     color: #fff;
-    background: #de4d53;
+    background: #cd5c5c;
     border-radius: 5px;
+    font-size: 16px;
   }
 
 }

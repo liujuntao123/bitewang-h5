@@ -1,10 +1,10 @@
 <template>
   <div class="my-theme-container">
-    <Header 
+    <!-- <Header 
       :is-show-back="true" 
       :title="name+'的主题'"
       class="header-fixed"
-    />
+    /> -->
     <div class="content">
       <div 
         class="list"
@@ -70,6 +70,7 @@ export default {
     if(this.uid == this.userInfo.uid){
       this.isOwner = true
     }
+    document.title=(this.$route.query.name||'我')+'的主题'
   },
   mounted () {
     //手动发主题贴
@@ -156,8 +157,9 @@ export default {
     width: 100%;
     height: 100%;
     .content{
-      margin-top: 50px;
-      height: calc(100% - 50px);
+      // margin-top: 50px;
+      // height: calc(100% - 50px);
+      height: calc(100%);
       padding-bottom: 10px;
       box-sizing: border-box;
       overflow: auto;
@@ -171,7 +173,7 @@ export default {
       border: 1px solid #c5c5c5;
       background: #fff;
       padding: 10px 15px;
-      margin-bottom: 10px;
+      margin-bottom: 7px;
     }
     .item-head{
       display: flex;
@@ -180,6 +182,7 @@ export default {
       }
       .created-at{
         color: #888;
+        font-size: 12px;
       }
       .item-top{
         width: 50px;

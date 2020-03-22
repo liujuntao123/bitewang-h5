@@ -9,18 +9,18 @@
           {{ item.nickname }}
         </div>
         <div class="item-post-time">
-          {{ item.commentCount > 0 ? "评论于 " : "发表于 " }}{{ showTime(item.createdAt) }}
+          {{ item.commentCount > 0 ? "最新评论于 " : "发表于 " }}{{ item.commentCount > 0 ?showTime(item.lastCommentAt):showTime(item.createdAt) }}
         </div>
       </div>
       <div class="item-post-is-top">
         <img class="post-is-top-img" src="./../images/top.png" v-show="(item.state&8)" alt="" draggable="false">
       </div>
       <div class="item-support-box">
-        <img class="item-support-img" @click="supportGood" v-if="!hasSupport" src="./../images/good1.png" alt="" draggable="false">
-        <img class="item-support-img" @click="noSupportGood" v-else src="./../images/good2.png" alt="" draggable="false">
         <div class="item-support-num">
           {{ item.goodCount }}
         </div>
+        <img class="item-support-img" @click="supportGood" v-if="!hasSupport" src="./../images/good1.png" alt="" draggable="false">
+        <img class="item-support-img" @click="noSupportGood" v-else src="./../images/good2.png" alt="" draggable="false">
       </div>
     </div>
     <div class="item-main">
@@ -87,7 +87,7 @@ export default {
     flex-direction: column;
     background-color: #fff;
     border: 1px solid #c5c5c5;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
     .item-header {
       display: flex;
       padding: 6px;
@@ -101,11 +101,11 @@ export default {
         }
       }
       .item-post-info {
-        font-size: 14px;
+        font-size: 12px;
         margin-left: 6px;
         width: 130px;
         .item-post-name {
-          font-size: 16px;
+          font-size: 14px;
         }
         .item-post-time {
           color: #888;
@@ -113,7 +113,7 @@ export default {
       }
       .item-post-is-top {
         width: 50px;
-        margin-left: 90px;
+        margin-left: 50px;
         padding-top: 2px;
         .post-is-top-img {
           width: 100%;
@@ -122,12 +122,16 @@ export default {
       .item-support-box {
         display: flex;
         margin-left: 10px;
+        justify-content: flex-end;
+        width: 63px;
         .item-support-img {
           width: 20px;
           height: 20px;
         }
         .item-support-num {
           margin-left: 5px;
+          margin-right: 3px;
+          color: #888;
         }
       }
     }

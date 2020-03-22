@@ -1,10 +1,10 @@
 <template>
   <div class="post-details-page">
-    <Header
+    <!-- <Header
       class="header-fixed" 
       :is-show-back="true" 
       :title="headName"
-    />
+    /> -->
     <div class="post-detail-container">
       <div class="item-box">
         <div class="item-header">
@@ -142,6 +142,7 @@ export default {
   },
   created() {
     this.tid = this.$route.query.tid
+    document.title=this.headName
   },
   async mounted() {
     this.isLoading = true
@@ -250,7 +251,7 @@ export default {
       width: 100%;
     }
     .post-detail-container {
-      margin-top: 50px;
+      // margin-top: 50px;
       height: calc(100% - 90px);
       box-sizing: border-box;
       overflow: auto;
@@ -275,9 +276,11 @@ export default {
             margin-left: 6px;
             flex: 1;
             .item-post-name {
+              font-size: 14px;
             }
             .item-post-time {
               color: #888;
+              font-size: 12px;
             }
           }
           .item-support-box {
@@ -302,6 +305,7 @@ export default {
           .item-comment-box {
             .comment-less-box {
               .comment-less-for-box {
+                padding: 2px 0;
                 .comment-item {
                   .comment-name {
                     color: #4299e5;

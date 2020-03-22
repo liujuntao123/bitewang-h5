@@ -22,7 +22,7 @@ axios.interceptors.response.use(function (response) {
 
 export default class base {
   // static baseUrl = config.baseUrl
-  static baseUrl = process.env.NODE_ENV==='development'?'/api':''
+  static baseUrl = process.env.NODE_ENV==='development'?'/api':config.baseUrl
   static get = axios.get
   static put = axios.put
   static post = axios.post

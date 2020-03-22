@@ -1,5 +1,6 @@
 <template>
   <div class="page-cover-page">
+    <div class="version-no">{{version}}</div>
     <div class="logo-container">
       <img class="logo-img" src="./../images/splash_logo.png" alt="" draggable="false">
     </div>
@@ -15,10 +16,12 @@
 </template>
 
 <script>
+import config from '@/config'
+
 export default {
   data() {
     return {
-
+      version:config.version
     }
   },
   methods: {
@@ -53,7 +56,7 @@ export default {
       width: 346px;
       height: 45px;
       position: absolute;
-      bottom: 15px;
+      bottom: 30px;
       box-sizing: border-box;
       display: flex;
       justify-content: center;
@@ -78,6 +81,11 @@ export default {
         background-color: #cd5c5c;
       }
     }
+  }
+  .version-no{
+    position: fixed;
+    bottom: 0;
+    right: 0;
   }
 </style>
 

@@ -1,10 +1,10 @@
 <template>
   <div class="post-list-page">
-    <Header 
+    <!-- <Header 
       class="header-fixed" 
       :is-show-back="true" 
       :title="headName"
-    />
+    /> -->
     <div class="post-list-container">
       <div
         class="list-container"
@@ -155,8 +155,9 @@ export default {
     width: 100%;
   }
   .post-list-container {
-    margin-top: 50px;
-    height: calc(100% - 50px);
+    // margin-top: 50px;
+    // height: calc(100% - 50px);
+    height: calc(100%);
     padding-bottom: 50px;
     box-sizing: border-box;
     overflow: auto;
