@@ -41,7 +41,8 @@ export default {
       phone:'',
       code:'',
       isSendCode:false,
-      time:60
+      time:60,
+      isSubmit:false,
     }
   },
   mounted(){
@@ -97,6 +98,9 @@ export default {
       })
     },
     handleSubmit(){
+      if(this.isSubmit){
+        return
+      }
       if(this.phone.trim().length ==0){
         return Toast('请输入手机号')
       }
@@ -111,7 +115,9 @@ export default {
         zone:'86',
         code:this.code.trim()
       }
+      this.isSubmit=true
       api.preReg(obj).then(res=>{
+        this.isSubmit = false
         if(res.result==0){
           // Toast('注册成功')
           this.$router.push({name:'reg',params:{phone:this.phone.trim()}})
