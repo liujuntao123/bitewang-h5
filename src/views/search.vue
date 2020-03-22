@@ -133,9 +133,13 @@ export default {
     }
     .search-input{
       flex: 1;
+      font-size: 14px;
       height: 30px;
-      line-height: 30px;
+      // line-height: 30px;
       box-sizing: border-box;
+      border-radius: 2px;
+      border: none;
+      outline: none;
     }
     .search-btn{
       height: 30px;

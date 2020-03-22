@@ -62,7 +62,6 @@ import PostsItem from './../components/postsitem'
 import dataUtil from '@/utils/data'
 import { mapGetters } from 'vuex'
 import { Toast } from 'mint-ui'
-import { setTimeout } from 'timers';
 
 
 export default {
@@ -101,32 +100,31 @@ export default {
           index: this.index,
           forceRefresh: this.forceRefresh
         }
-        setTimeout(() => {
-          api.BaTopicList(getListsObj).then(res => {
-            this.forceRefresh = false
-            if (res.result === 0) {
-              if (res.topicList.length > 0) {
-                if (this.lists.length > 0) {
-                  this.lists = dataUtil.jsonDuplicateRemoval(this.lists, res.topicList)
-                  this.index += 1
-                  this.isLoading = false
-                } else {
-                  res.topicList.forEach(e => {
-                    this.lists.push(e)
-                  })
-                  this.index += 1
-                  this.isLoading = false
-                }
-              } else {
+
+        api.BaTopicList(getListsObj).then(res => {
+          this.forceRefresh = false
+          if (res.result === 0) {
+            if (res.topicList.length > 0) {
+              if (this.lists.length > 0) {
+                this.lists = dataUtil.jsonDuplicateRemoval(this.lists, res.topicList)
+                this.index += 1
                 this.isLoading = false
-                this.hasNewList = false
+              } else {
+                res.topicList.forEach(e => {
+                  this.lists.push(e)
+                })
+                this.index += 1
+                this.isLoading = false
               }
             } else {
               this.isLoading = false
-              Toast(res.message)
+              this.hasNewList = false
             }
-          })
-        }, 2000)
+          } else {
+            this.isLoading = false
+            Toast(res.message)
+          }
+        })
       }
     },
     goPostingPage() {
