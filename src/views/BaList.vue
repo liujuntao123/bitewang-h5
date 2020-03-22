@@ -4,7 +4,7 @@
       :is-show-back="false" 
       :is-show-diy="false"
       :isShowSearch="true"
-      :title="'币吧'"
+      :title="'比特汪'"
       class="header-fixed">
     </Header>
   <div class="item-container" @click="tapAll" >

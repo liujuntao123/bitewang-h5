@@ -21,6 +21,7 @@
 
 <script>
 import api from '@/api'
+import { Toast } from 'mint-ui';
 
 export default {
   data(){
@@ -56,9 +57,14 @@ export default {
       this.isSubmit=true
       api.login(obj).then(res=>{
         this.isSubmit=false
-        console.log('login success',res)
-        this.$store.dispatch('userInfo/setUserInfo',res)
-        this.$router.push('balist')
+        if(res.result==0){
+          console.log('login success',res)
+          this.$store.dispatch('userInfo/setUserInfo',res)
+          this.$router.push('balist')
+          window.location.reload()
+        }else {
+          Toast('登录失败，账号或者密码错误')
+        }
       })
     }
   }
