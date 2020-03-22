@@ -26,6 +26,7 @@ import { Toast } from 'mint-ui';
 export default {
   data(){
     return{
+      isSubmit:false,
       nickname:'',
       pwd:'',
       avatar:'https://static001.geekbang.org/resource/image/15/be/1538be68a5f597ab1baf179a4a724ebe.jpg?x-oss-process=image/resize,m_fill,h_212,w_330',
@@ -42,7 +43,10 @@ export default {
   },
   methods:{
     handleSubmit(){
-      console.log(this.$store.state.userInfo.userInfo)
+      // console.log(this.$store.state.userInfo.userInfo)
+      if(this.isSubmit){
+        return
+      }
       if(this.nickname.trim().length===0){
         return
       }
@@ -56,7 +60,9 @@ export default {
         nickname:this.nickname.trim(),
         avatar:this.avatar
       }
+      this.isSubmit=true
       api.reg(obj).then(res=>{
+        this.isSubmit=false
         if(res.result==0){
           console.log('reg success',res)
           this.$store.dispatch('userInfo/setUserInfo',res)

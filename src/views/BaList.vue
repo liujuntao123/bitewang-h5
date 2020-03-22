@@ -1,9 +1,12 @@
 <template>
 <div>
-  <!-- <div @click="handleJumpSearch" v-if="!isOnSearch" class="mask">
-      <img class="search_black" src="../images/search_black.png" alt="" srcset=""/>
-      输入关键字搜索
-    </div> -->
+  <Header 
+      :is-show-back="false" 
+      :is-show-diy="false"
+      :isShowSearch="true"
+      :title="'币吧'"
+      class="header-fixed">
+    </Header>
   <div class="item-container" @click="tapAll" >
     <div class="item dropzone" v-for="(item, index) in all_list" 
     :key="index" 
@@ -36,7 +39,7 @@
 </template>
 
 <script>
-// @dragenter="dragEnter(index,$event)" 
+import Header from '@/components/header'
 import dragpolyfill from '../lib/draggable-polyfill';
 import api from '@/api'
 import config from '@/config'
@@ -49,7 +52,8 @@ import TabBar from '@/components/tabBar'
 
 export default {
   components: {
-    TabBar
+    TabBar,
+    Header
   },
   data(){
     return {
@@ -79,6 +83,7 @@ export default {
       // console.log('blacklist', this.blacklist)
       this.expire_time = onlineConfig.ba_refresh_seconds
       this.getBaList().then(()=>{
+        this.originBaList=[...this.all_list]
         this.setBlankList()
       })
       // this.getSystemInfo()
@@ -108,53 +113,7 @@ export default {
         storage.setToLocalStorage(this.all_list, 'baList', this.expire_time)
       })
       
-      // var timestamp = Date.parse(new Date())
-      // var data_expiration = localStorage.getItem('data_expiration'+'_balist')
-      
-      // if (data_expiration && data_expiration > timestamp) {
-      //   //如果有缓存，且缓存没有过期
-      //   let all_list = localStorage.getItem('baList')
-      //   // all_list = this.filterBlackList(all_list)
-      //   all_list=JSON.parse(all_list)
-      //   this.all_list = all_list
-      //   return Promise.resolve(all_list)
-      // } else {
-      //   return api.getBaList().then(res => {console.log('res',res)
-      //     // let all_list = res.baList.sort((a, b) => b.level - a.level)
-      //     let all_list = localStorage.getItem('baList')
-      //     all_list=JSON.parse(all_list)
-      //     console.log('all_list>>>>>',all_list)
-      //     let hasStorage = !!all_list
-      //     all_list = all_list || []
-      //     // console.log('all_list',all_list)
-      //     let new_list = res.baList
-      //     // 等级为10且原先没有的吧，则加到最前面
-      //     if (hasStorage) {
-      //       new_list = new_list.filter(
-      //         item => item.level >= 10 && !all_list.some(it => it.id == item.id)
-      //       )
-      //     }
-      //     all_list = [...new_list, ...all_list]
-      //     console.log('all_list', all_list)
-      //     console.log('blacklist', this.blacklist)
-      //     this.all_list = all_list
-      //     this.setBaList()
-      //     // this.all_list = this.filterBlackList(this.all_list)
-      //     return this.all_list
-      //   })
-      // }
     },
-    // filterBlackList(list) {
-    //   return list.filter(
-    //     item => this.blacklist.indexOf(item.category) == -1 || item.from_search
-    //   )
-    // },
-    // setBaList() {
-    //   var timestamp = Date.parse(new Date())
-    //   var expiration = timestamp + this.expire_time * 1000
-    //   localStorage.setItem('baList', JSON.stringify(this.all_list))
-    //   localStorage.setItem('data_expiration', expiration)
-    // },
     tapAll(e) {
       // console.log('>>>>>>>')
       // alert('>>>>>>')
@@ -164,25 +123,40 @@ export default {
     },
     handleTapItem(item) {
       // if (this.currentDelete != -1) {
-      //   return
+        //   return
       // }
       // alert('>>>>>>>')
       if (this.canDelete) {
         return
       }
-      wx.navigateTo({ url: 'info?id=' + item.id + '&ba_name=' + item.name })
+      this.goBaPostList(item)
+      // wx.navigateTo({ url: 'info?id=' + item.id + '&ba_name=' + item.name })
     },
     handleDelete(index) {
       console.log('handle delete.....', index)
-      // let index = e.currentTarget.dataset.index
       this.all_list.splice(index, 1)
       this.setBlankList()
       if (this.all_list.length == 1) {
         this.canDelete = false
       }
-      // this.pending()
       this.setBaList()
-      // this.currentDelete = -1
+    },
+    setBaList(){
+      storage.setToLocalStorage(this.all_list, 'baList', this.expire_time)
+      api.updateUserInfo({
+        sid: this.sid,
+        type: 'ba',
+        baIdList: this.all_list.map(item=>item.id)
+      }).then(res=>{
+        if(res.result == 0){
+          console.log('存入后台成功')
+          // this.baListId = idList
+          // Toast('添加成功！')
+          // this.getBaList()
+        }else{
+          // Toast('添加失败！')
+        }
+      })
     },
     gtouchstart (e) {
       // alert('touch start')
@@ -211,7 +185,8 @@ export default {
       this.timeOutEvent = 0
       if(!this.draggable&&!this.hasMoved){
         this.hasMoved=false
-        wx.miniProgram.navigateTo({ url: 'info?id=' + item.id + '&ba_name=' + item.name })
+        // wx.miniProgram.navigateTo({ url: 'info?id=' + item.id + '&ba_name=' + item.name })
+        this.goBaPostList(item)
       }
       
     },
@@ -227,15 +202,11 @@ export default {
       console.log('long tap')
       this.draggable=true
       this.canDelete=true
-      // this.$nextTick(()=>{
-      //   console.log('>>>>')
-      //   // dragpolyfill()
-      // })
     },
     dragStart(index,e){
       console.log('start',e)
       // if(e.target.className =='image'){
-      //   return
+        //   return
       // }
       this.currentIndex=this.startIndex=index
       // e.target.style.visibility ='hidden'
@@ -246,6 +217,7 @@ export default {
       // e.preventDefault();
 
     },
+      // 调接口远程存一份数据
     onDrag(index,e){
       // console.log('>>>>>>',index)
     },
@@ -292,6 +264,10 @@ export default {
     },
     dragEnd(index,e){
       console.log('dragend')
+      // 如果操作前后两个数组发生变化
+      if(this.all_list.map(item=>item.id).toString()!==this.originBaList.map(item=>item.id)){
+        this.setBaList()
+      }
       this.startTarget.classList.remove('on-drag')
       this.reset()
       console.log(this.all_list)
@@ -310,6 +286,9 @@ export default {
     //   console.log('dragleave>>>>>>>>')
     // }
     goBaPostList(item) {
+      if (this.canDelete) {
+        return
+      }
       this.$store.dispatch('baInfo/setbaItem', item)
       this.$router.push('postslist')
     }

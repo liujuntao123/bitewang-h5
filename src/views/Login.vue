@@ -28,6 +28,7 @@ export default {
       phone:'',
       pwd:'',
       isShowPwd:false,
+      isSubmit:false
     }
   },
   mounted(){
@@ -38,6 +39,9 @@ export default {
       this.isShowPwd=!this.isShowPwd
     },
     handleSubmit(){
+      if(this.isSubmit){
+        return
+      }
       if(this.phone.trim().length===0){
         return
       }
@@ -49,7 +53,9 @@ export default {
         zone:'86',
         pwd:this.pwd
       }
+      this.isSubmit=true
       api.login(obj).then(res=>{
+        this.isSubmit=false
         console.log('login success',res)
         this.$store.dispatch('userInfo/setUserInfo',res)
         this.$router.push('balist')
