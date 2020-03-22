@@ -106,13 +106,16 @@ export default {
       })
     },
     handleUserInfo () {
-      this.$router.push({path: '/userInfo', query: {uid: this.uid, name: this.currentInfo.nickname}})
+      let nickname = this.isMine ? '我' : this.currentInfo.nickname
+      this.$router.push({path: '/userInfo', query: {uid: this.uid, name: nickname}})
     },
     handleTheme () {
-      this.$router.push({path: '/userTheme', query: {uid: this.uid, name: this.currentInfo.nickname}})
+      let nickname = this.isMine ? '我' : this.currentInfo.nickname
+      this.$router.push({path: '/userTheme', query: {uid: this.uid, name: nickname}})
     },
     handleComment () {
-      this.$router.push({path: '/userComment', query: {uid: this.uid, name: this.currentInfo.nickname}})
+      let nickname = this.isMine ? '我' : this.currentInfo.nickname
+      this.$router.push({path: '/userComment', query: {uid: this.uid, name: nickname}})
     },
     handleLogout () {
       console.log('退出登录')
