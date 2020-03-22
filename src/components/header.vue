@@ -11,6 +11,7 @@
       <img
         class="back"
         src="../images/backward.png"
+        draggable="false"
         alt=""
       >
     </div>
@@ -24,6 +25,7 @@
       <img
         class="search"
         src="../images/search.png"
+        draggable="false"
         alt=""
       >
     </div>

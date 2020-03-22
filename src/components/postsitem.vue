@@ -2,7 +2,7 @@
   <div class="item-box" @click="goPostDetail">
     <div class="item-header">
       <div class="item-img-box" @click.stop="goUserInfo(item.uid)">
-        <img class="item-img-img" :src="item.avatar" alt="">
+        <img class="item-img-img" :src="item.avatar" alt="" draggable="false">
       </div>
       <div class="item-post-info">
         <div class="item-post-name">
@@ -13,11 +13,11 @@
         </div>
       </div>
       <div class="item-post-is-top">
-        <img class="post-is-top-img" src="./../images/top.png" v-show="(item.state&8)" alt="">
+        <img class="post-is-top-img" src="./../images/top.png" v-show="(item.state&8)" alt="" draggable="false">
       </div>
       <div class="item-support-box">
-        <img class="item-support-img" @click="supportGood" v-if="!hasSupport" src="./../images/good1.png" alt="" >
-        <img class="item-support-img" @click="noSupportGood" v-else src="./../images/good2.png" alt="">
+        <img class="item-support-img" @click="supportGood" v-if="!hasSupport" src="./../images/good1.png" alt="" draggable="false">
+        <img class="item-support-img" @click="noSupportGood" v-else src="./../images/good2.png" alt="" draggable="false">
         <div class="item-support-num">
           {{ item.goodCount }}
         </div>

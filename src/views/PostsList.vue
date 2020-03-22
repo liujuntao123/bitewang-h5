@@ -49,6 +49,7 @@
       <img 
         class="new-post-img" 
         src="./../images/new_post.png" 
+        draggable="false"
         alt=""
       >
     </div>
@@ -72,19 +73,23 @@ export default {
       total: 0,
       forceRefresh: false,
       lists: [],
-      hasNewList: true
+      hasNewList: true,
+      headName: '',
+      bid: null
     }
   },
   computed: {
     ...mapGetters({
-      sid: 'userInfo/getSid',
-      headName: 'baInfo/getBaName',
-      bid: 'baInfo/getBaId'
+      sid: 'userInfo/getSid'
     })
+  },
+  created () {
+    this.headName = this.$route.query.name
+    this.bid = this.$route.query.bid
   },
   mounted() {
     document.title = this.headName
-    this.$route.params.postRefreshPostList ? this.forceRefresh = true : this.forceRefresh = false
+    this.$route.query.postRefreshPostList ? this.forceRefresh = true : this.forceRefresh = false
   },
   components: {
     Header,
@@ -100,7 +105,6 @@ export default {
           index: this.index,
           forceRefresh: this.forceRefresh
         }
-
         api.BaTopicList(getListsObj).then(res => {
           this.forceRefresh = false
           if (res.result === 0) {
@@ -128,11 +132,10 @@ export default {
       }
     },
     goPostingPage() {
-      this.$router.push('posting')
+      this.$router.push({path: '/posting', query: {bid: this.bid, name: this.headName}})
     },
     goPostDetail(item) {
-      this.$store.dispatch('baInfo/setPostItem', item)
-      this.$router.push('postdetails')
+      this.$router.push({path: '/postdetails', query: {tid: item.tid}})
     }
   }
 }
@@ -153,7 +156,7 @@ export default {
   }
   .post-list-container {
     margin-top: 50px;
-    height: calc(100% - 110px);
+    height: calc(100% - 50px);
     padding-bottom: 5px;
     box-sizing: border-box;
     overflow: auto;
@@ -164,7 +167,7 @@ export default {
     }
     .loading-more {
       text-align: center;
-      padding: 10px 0;
+      padding: 10px;
       .loading-more-icon {
         display: inline-block;
         vertical-align: middle;
@@ -174,6 +177,7 @@ export default {
         line-height: 30px;
         padding-left: 10px;
         color: #888;
+        padding-bottom: 50px;
       }
     }
     .loading-all {

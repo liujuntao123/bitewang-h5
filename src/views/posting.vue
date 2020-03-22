@@ -18,23 +18,26 @@ import api from '@/api'
 import Header from './../components/header'
 import { mapGetters } from 'vuex'
 import { Toast } from 'mint-ui'
-import { setTimeout } from 'timers';
 
 export default {
   data() {
     return {
-      textModel: ''
+      textModel: '',
+      headTitle: '',
+      bid: null
     }
   },
   computed: {
     ...mapGetters({
-      sid: 'userInfo/getSid',
-      headTitle: 'baInfo/getBaName',
-      bid: 'baInfo/getBaId'
+      sid: 'userInfo/getSid'
     })
   },
   components: {
     Header
+  },
+  created() {
+    this.headTitle = this.$route.query.name
+    this.bid = this.$route.query.bid
   },
   mounted() {
     document.title = this.headTitle
@@ -55,11 +58,15 @@ export default {
         if(res.result === 0) {
           Toast({
             message: '发布成功',
-            duration: 2000
+            duration: 1000
           })
           setTimeout(() => {
-            this.$router.replace({name:'postslist',params:{postRefreshPostList: true}})
-          },2000)
+            this.$router.push({path:'/postslist',query:{
+              postRefreshPostList: true,
+              bid: this.bid,
+              name: this.headTitle
+            }})
+          },1000)
         } else {
           Toast(res.message)
         }

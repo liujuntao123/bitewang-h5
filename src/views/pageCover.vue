@@ -1,7 +1,7 @@
 <template>
   <div class="page-cover-page">
     <div class="logo-container">
-      <img class="logo-img" src="./../images/splash_logo.png" alt="">
+      <img class="logo-img" src="./../images/splash_logo.png" alt="" draggable="false">
     </div>
     <div class="login-register-btn-container">
       <div class="register-btn" @click="goRegister">

@@ -289,8 +289,7 @@ export default {
       if (this.canDelete) {
         return
       }
-      this.$store.dispatch('baInfo/setbaItem', item)
-      this.$router.push('postslist')
+      this.$router.push({path: '/postslist', query: {bid: item.id, name: item.name}})
     }
   }
 }

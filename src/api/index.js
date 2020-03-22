@@ -14,6 +14,7 @@ const Login='Login'
 const ResetPwd='ResetPwd'
 const NewTopic='NewTopic'
 const BaTopicList='BaTopicList'
+const Topic='Topic'
 const UpdateUserInfo='UpdateUserInfo'
 const UserTopicList='UserTopicList'
 const UserCommentList='UserCommentList'
@@ -69,6 +70,10 @@ export default class api extends base {
   }
   static resetPwd(data){
     const url = `${this.baseUrl}/${ResetPwd}`
+    return this.post(url,data)
+  }
+  static Topic(data){
+    const url = `${this.baseUrl}/${Topic}`
     return this.post(url,data)
   }
   static newTopic(data){

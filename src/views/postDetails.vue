@@ -16,6 +16,7 @@
               class="item-img-img"
               :src="item.avatar" 
               alt=""
+              draggable="false"
             >
           </div>
           <div class="item-post-info">
@@ -33,6 +34,7 @@
               v-if="!hasSupport" 
               src="./../images/good1.png" 
               alt="" 
+              draggable="false"
             >
             <img 
               class="item-support-img" 
@@ -40,12 +42,13 @@
               v-else 
               src="./../images/good2.png" 
               alt=""
+              draggable="false"
             >
           </div>
         </div>
         <div class="item-main">
           <div class="item-content">
-            {{ item.summary }}
+            {{ item.content }}
           </div>
           <div
             class="item-comment-box" 
@@ -109,21 +112,26 @@ export default {
       commentText: '',
       commentList: [],
       cid: -1,
-      hasMoreComment: false
+      hasMoreComment: false,
+      item: {},
+      tid: null
     }
   },
   inject: ['reload'],
   computed: {
     ...mapGetters({
-      sid: 'userInfo/getSid',
-      item: 'baInfo/getPostItem'
+      sid: 'userInfo/getSid'
     })
   },
   components: {
     Header
   },
-  mounted() {
-    this.getCommentList()
+  created() {
+    this.tid = this.$route.query.tid
+  },
+  async mounted() {
+    await this.getTopicInfo()
+    await this.getCommentList()
   },
   methods: {
     showTime(timestamp, format) {
@@ -136,14 +144,32 @@ export default {
     goUserInfo(uid) {
       this.$router.push({path: '/user', query: {uid: uid}})
     },
-    getCommentList() {
+    async getTopicInfo() {
+      if (this.tid && this.sid) {
+        await api.Topic({
+          sid: this.sid,
+          tid: this.tid
+        }).then(res => {
+          if (res.result === 0) {
+            this.item = res.topic
+          } else {
+            Toast(res.message)
+          }
+        }).catch(err => {
+          Toast(JSON.stringify(err))
+        })
+      } else {
+        Toast('参数错误')
+      }
+    },
+    async getCommentList() {
       if (this.item.commentCount > 0) {
         let getCommentObj = {
           sid: this.sid,
           tid: this.item.tid,
           cid: this.cid
         }
-        api.TopicCommentList(getCommentObj).then(res => {
+        await api.TopicCommentList(getCommentObj).then(res => {
           if (res.result === 0) {
             if (res.commentList.length > 0) {
               this.commentList = this.commentList.concat(res.commentList)
@@ -177,11 +203,11 @@ export default {
         if(res.result === 0) {
           Toast({
             message: '评论成功',
-            duration: 2000
+            duration: 1000
           })
           setTimeout(() => {
             this.reload();
-          },2000)
+          },1000)
         } else {
           Toast(res.message)
         }
