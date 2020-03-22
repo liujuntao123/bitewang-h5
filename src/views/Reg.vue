@@ -1,5 +1,10 @@
 <template>
   <div>
+    <Header 
+      class="header-fixed" 
+      :is-show-back="true" 
+      :title="'填写用户信息'"
+    />
     <div class="input-box">
       <i class="input-icon user"></i>
     <input class="text-input" v-model="nickname" placeholder="输入昵称" type="text">
@@ -22,8 +27,10 @@
 <script>
 import api from '@/api'
 import { Toast } from 'mint-ui';
+import Header from '@/components/header'
 
 export default {
+  components: {Header},
   data(){
     return{
       isSubmit:false,

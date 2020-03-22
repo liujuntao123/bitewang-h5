@@ -1,5 +1,10 @@
 <template>
   <div>
+    <Header 
+      class="header-fixed" 
+      :is-show-back="true" 
+      :title="'用户登录'"
+    />
     <div class="input-box">
       <i class="input-icon mobile"></i>
     <input class="text-input" v-model="phone" placeholder="输入手机号" type="text">
@@ -22,8 +27,12 @@
 <script>
 import api from '@/api'
 import { Toast } from 'mint-ui';
+import Header from '@/components/header'
 
 export default {
+  components:{
+    Header,
+  },
   data(){
     return{
       phone:'',
