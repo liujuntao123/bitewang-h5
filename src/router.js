@@ -23,6 +23,10 @@ console.log('router do')
 export default new Router({
   routes: [
     {
+      path:'*',
+      redirect:'/balist'
+    },
+    {
       path: '/balist',
       name: 'balist',
       component: BaList

@@ -13,6 +13,7 @@ router.beforeEach((to, from, next) => {
   if(noLoginRouters.indexOf(to.path)>-1){console.log('islogin',isLogin)
     if(isLogin){
       router.push('balist')
+      next(false)
       // window.location.href ='/web#/balist'
     }else {
       next()
@@ -21,6 +22,7 @@ router.beforeEach((to, from, next) => {
     if(!isLogin){
       // window.location.href ='/web#/login'
       router.push('pagecover')
+      next(false)
     }else {console.log('>>>>,islogin')
       next()
     }
