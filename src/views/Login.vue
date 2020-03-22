@@ -61,7 +61,7 @@ export default {
           console.log('login success',res)
           this.$store.dispatch('userInfo/setUserInfo',res)
           this.$router.push('balist')
-          window.location.reload()
+          // window.location.reload()
         }else {
           Toast('登录失败，账号或者密码错误')
         }
