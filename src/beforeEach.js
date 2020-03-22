@@ -1,7 +1,7 @@
 import router from './router'
 import store from '@/store'
 
-const noLoginRouters=['/login','/reg','/prereg']
+const noLoginRouters=['/login','/reg','/prereg','/pagecover']
 
 // 在进入页面的时候判断登录态
 router.beforeEach((to, from, next) => {
@@ -20,7 +20,7 @@ router.beforeEach((to, from, next) => {
   }else {
     if(!isLogin){
       // window.location.href ='/web#/login'
-      router.push('login')
+      router.push('pagecover')
     }else {console.log('>>>>,islogin')
       next()
     }
