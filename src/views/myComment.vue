@@ -89,7 +89,8 @@ export default {
           uid: this.uid,
           beginCid: this.beginCid
         }).then(res=>{
-          let newList = res.commentList.filter(item => item.state == 0)
+          // let newList = res.commentList.filter(item => item.state == 0)
+          let newList = res.commentList.filter(item => !((item.state&1)||(item.state&2)||(item.state&4)))
           this.list = this.list.concat(newList)
           this.beginCid = res.preBeginCid
           this.loading = false;

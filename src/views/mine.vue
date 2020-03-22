@@ -77,7 +77,7 @@ export default {
   },
   created () {
     this.uid = this.$route.query.uid || this.userInfo.uid
-    // 通过判断query的id来区分是不是“我的”)
+    // 通过判断query的id来区分是不是“我的”
     if(!this.$route.query.uid){
       this.isMine = true
     }
