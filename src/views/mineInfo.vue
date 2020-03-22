@@ -10,7 +10,7 @@
         <div class="item">
           <div class="item-label">头像</div>
           <div class="item-value">
-            <img :src="currentInfo.avatar" alt="" class="avatar-pic">
+            <img :src="currentInfo.avatar" alt="" draggable="false" class="avatar-pic">
           </div>
         </div>
         <div class="item">

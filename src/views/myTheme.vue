@@ -20,12 +20,12 @@
             <div class="item-top" v-if="item.isTop"></div>
             <div class="item-delete" @click="handleDelete(item, index)" v-if="isOwner"></div>
           </div>
-          <div class="item-content">
+          <div class="item-content" @click="handleTheme(item)">
             {{ item.summary }}
           </div>
           <div class="item-foot">
             <div class="item-foot-part">{{ item.goodCount }}赞</div>
-            <div class="item-foot-part">{{ item.commentCount }}评论</div>
+            <div class="item-foot-part" @click="handleTheme(item)">{{ item.commentCount }}评论</div>
           </div>
         </div>
       </div>
@@ -127,7 +127,10 @@ export default {
         } 
       });
     },
-    timeFormat(timestamp) {
+    handleTheme (item) {
+      this.$router.push({path: '/postdetails', query: {tid: item.tid}})
+    },
+    timeFormat (timestamp) {
       return new moment(timestamp).format('YYYY-MM-DD HH:mm:ss')
     },
   }
