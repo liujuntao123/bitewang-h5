@@ -35,7 +35,7 @@
         <div class="item">关于</div>
       </div>
       <div class="footer" v-if="isMine">
-        <a href="javascript:;" class="logout" @click="handleLogout">退出登录</a>
+        <div class="logout" @click="handleLogout">退出登录</div>
       </div>
     </div>
    
@@ -106,13 +106,16 @@ export default {
       })
     },
     handleUserInfo () {
-      this.$router.push({path: '/userInfo', query: {uid: this.uid, name: this.currentInfo.nickname}})
+      let nickname = this.isMine ? '我' : this.currentInfo.nickname
+      this.$router.push({path: '/userInfo', query: {uid: this.uid, name: nickname}})
     },
     handleTheme () {
-      this.$router.push({path: '/userTheme', query: {uid: this.uid, name: this.currentInfo.nickname}})
+      let nickname = this.isMine ? '我' : this.currentInfo.nickname
+      this.$router.push({path: '/userTheme', query: {uid: this.uid, name: nickname}})
     },
     handleComment () {
-      this.$router.push({path: '/userComment', query: {uid: this.uid, name: this.currentInfo.nickname}})
+      let nickname = this.isMine ? '我' : this.currentInfo.nickname
+      this.$router.push({path: '/userComment', query: {uid: this.uid, name: nickname}})
     },
     handleLogout () {
       console.log('退出登录')
@@ -199,6 +202,12 @@ export default {
       color: #fff;
       background: #de4d53;
       border-radius: 5px;
+      -webkit-touch-callout:none;
+      -webkit-user-select:none;
+      -khtml-user-select:none;
+      -moz-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
     }
   }
 </style>

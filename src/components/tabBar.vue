@@ -2,7 +2,7 @@
   <div class="tab-bar">
     <div class="bar-list">
       <div v-for="(item, index) in list" :key="index" class="bar-item" @click="handleTo(item)">
-        <img :src="path == item.url ? item.activeIcon: item.icon" alt="" class="bar-icon">
+        <img draggable="false" :src="path == item.url ? item.activeIcon: item.icon" alt="" class="bar-icon">
         <div class="bar-name" :class="{'active': path == item.url}">{{item.name}}</div>
       </div>
     </div>
