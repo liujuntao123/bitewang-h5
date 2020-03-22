@@ -95,6 +95,7 @@
       <input 
         class="comment-input" 
         maxlength="50" 
+        draggable="false"
         v-model="commentText" 
         placeholder="发表你的评论" 
         type="text"
