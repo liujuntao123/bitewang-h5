@@ -92,7 +92,12 @@ export default {
           uid: this.uid,
           beginTid: this.beginTid
         }).then(res=>{
-          let newList = res.topicList.filter(item => item.state == 0)
+          // let newList = res.topicList.filter(item => item.state == 0)
+          let newList = res.topicList.filter(item => !((item.state&1)||(item.state&2)||(item.state&4)))
+          newList.map(item => {
+            item.isTop = !!(item.state&8)
+            return item
+          })
           this.list = this.list.concat(newList)
           this.beginTid = res.preBeginTid
           this.loading = false;

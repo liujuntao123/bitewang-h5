@@ -55,7 +55,8 @@ export default {
         topicCount: '',
         commentCount: '',
         score: '',
-        state: ''
+        state: '',
+        mobile: ''
       }
     }
   },
@@ -81,6 +82,10 @@ export default {
         this.currentInfo.commentCount = res.commentCount
         this.currentInfo.score = res.score
         this.currentInfo.state = res.state
+        this.currentInfo.mobile = res.mobile
+        if(this.uid == this.userInfo.uid){
+          this.currentInfo.mobile = this.userInfo.mobile
+        }
       })
     },
   }
