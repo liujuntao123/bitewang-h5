@@ -342,8 +342,9 @@ export default {
     .post-comment-container {
       position: fixed;
       left: 0;
+      bottom: 1px;
       border-bottom: 0;
-      border-top: 1px solid #888;
+      border-top: 1px solid #aaa;
       width: 100%;
       height: 40px;
       line-height: 40px;

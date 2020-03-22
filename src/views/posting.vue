@@ -102,6 +102,10 @@ export default {
         outline: none;
         resize: none;
       }
+      textarea {
+        outline: none;
+        border-width: 0;
+      }
     }
   }
 </style>
