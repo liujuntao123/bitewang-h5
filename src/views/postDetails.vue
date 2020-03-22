@@ -72,6 +72,18 @@
         </div>
       </div>
       <div 
+        class="loading-more" 
+        v-if="isLoading" 
+      >
+        <mt-spinner 
+          type="fading-circle" 
+          :size="22" 
+          color="#888" 
+          class="loading-more-icon"
+        />
+        <span class="loading-more-txt">加载中...</span>
+      </div>
+      <div 
         v-if="hasMoreComment" 
         @click="clickShowMore" 
         class="show-more-comment"
@@ -114,7 +126,8 @@ export default {
       cid: -1,
       hasMoreComment: false,
       item: {},
-      tid: null
+      tid: null,
+      isLoading: false
     }
   },
   inject: ['reload'],
@@ -130,8 +143,10 @@ export default {
     this.tid = this.$route.query.tid
   },
   async mounted() {
+    this.isLoading = true
     await this.getTopicInfo()
     await this.getCommentList()
+    this.isLoading = false
   },
   methods: {
     showTime(timestamp, format) {
@@ -301,6 +316,21 @@ export default {
               }
             }
           }
+        }
+      }
+      .loading-more {
+        text-align: center;
+        padding: 10px;
+        .loading-more-icon {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .loading-more-txt {
+          height: 30px;
+          line-height: 30px;
+          padding-left: 10px;
+          color: #888;
+          padding-bottom: 50px;
         }
       }
       .show-more-comment {
