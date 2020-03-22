@@ -128,7 +128,7 @@ export default {
       });
     },
     timeFormat(timestamp) {
-      return new moment(timestamp).format('YYYY-MM-DD')
+      return new moment(timestamp).format('YYYY-MM-DD HH:mm:ss')
     },
   }
 }
