@@ -6,8 +6,10 @@ import infiniteScroll from 'vue-infinite-scroll'
 // import dragpolyfill from './lib/draggable-polyfill';
 // import vueFinger from './lib/vue-finger'
 import {polyfill} from "mobile-drag-drop";
+import Mint from 'mint-ui'
+
 import 'mint-ui/lib/style.css'
-import { Spinner } from 'mint-ui';
+
 
 // import  { ToastPlugin } from 'vux'
 // Vue.use(ToastPlugin)
@@ -31,7 +33,7 @@ polyfill({
 // Vue.use(vueFinger)
 
 Vue.use(infiniteScroll)
-Vue.component(Spinner.name, Spinner);
+Vue.use(Mint)
 Vue.config.productionTip = false
 
 

@@ -103,7 +103,7 @@ export default {
       .item-post-info {
         font-size: 12px;
         margin-left: 6px;
-        width: 130px;
+        width: 135px;
         .item-post-name {
           font-size: 14px;
         }
@@ -113,7 +113,7 @@ export default {
       }
       .item-post-is-top {
         width: 50px;
-        margin-left: 50px;
+        margin-left: 60px;
         padding-top: 2px;
         .post-is-top-img {
           width: 100%;
@@ -121,7 +121,6 @@ export default {
       }
       .item-support-box {
         display: flex;
-        margin-left: 10px;
         justify-content: flex-end;
         width: 63px;
         .item-support-img {
@@ -131,6 +130,7 @@ export default {
         .item-support-num {
           margin-left: 5px;
           margin-right: 3px;
+          margin-top: 3px;
           color: #888;
         }
       }
@@ -139,22 +139,22 @@ export default {
       font-size: 14px;
       display: flex;
       flex-direction: column;
-      padding: 0 20px 16px 42px;
+      padding: 0 20px 10px 42px;
       .item-content {
-        margin-bottom: 6px;
         font-size: 16px;
       }
       .item-comment-box {
+        margin-top: 5px;
         .comment-less-box {
           .comment-less-for-box {
             .comment-item {
+              margin-bottom: 3px;
               .comment-name {
                 color: #4299e5;
               }
             }
           }
           .show-more-comment {
-            margin-top: 6px;
             float: right;
             color: #4299e5;
           }

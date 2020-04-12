@@ -28,23 +28,12 @@
             </div>
           </div>
           <div class="item-support-box">
-            <img
-              class="item-support-img" 
-              @click="supportGood" 
-              v-if="!hasSupport" 
-              src="./../images/good1.png" 
-              alt="" 
-              draggable="false"
-            >
-            <img 
-              class="item-support-img" 
-              @click="noSupportGood" 
-              v-else 
-              src="./../images/good2.png" 
-              alt=""
-              draggable="false"
-            >
-          </div>
+            <div class="item-support-num">
+              {{ item.goodCount }}
+            </div>
+            <img class="item-support-img" @click="supportGood" v-if="!hasSupport" src="./../images/good1.png" alt="" draggable="false">
+            <img class="item-support-img" @click="noSupportGood" v-else src="./../images/good2.png" alt="" draggable="false">
+          </div>          
         </div>
         <div class="item-main">
           <div class="item-content">
@@ -64,8 +53,9 @@
                   <span 
                     class="comment-name" 
                     @click="goUserInfo(comment.uid)"
-                  >{{ comment.nickname }}:</span><span class="comment-content">{{ comment.content }}</span><span class="comment-time">{{ showTime(comment.createdAt, 'YYYY-MM-DD') }}</span>
+                  >{{ comment.nickname }}:</span><span class="comment-content">{{ comment.content }}</span>
                 </div>
+                <div class="comment-time">{{ showTime(comment.createdAt, 'YYYY-MM-DD') }}</div>
               </div>
             </div>
           </div>
@@ -91,18 +81,34 @@
         查看更多
       </div>
     </div>
-    <div class="post-comment-container">
+    <div 
+      class="post-comment-container" 
+      v-if="!textareaOpening" 
+      @click="openTextareaBox"
+    >
       <input 
         class="comment-input" 
         maxlength="50" 
         draggable="false"
         v-model="commentText" 
-        placeholder="发表你的评论" 
+        placeholder="发表你的评论..." 
         type="text"
       >
       <div 
         class="comment-submit" 
         @click="submitComment"
+      >
+        发表
+      </div>
+    </div>
+    <div 
+      class="post-comment-textarea-container" 
+      v-if="textareaOpening"
+    >
+      <textarea class="post-textarea" maxlength="150" v-model="textareaText" placeholder="发表你的评论..." name="" id=""></textarea>
+      <div 
+        class="textarea-comment-submit" 
+        @click="textareaSubmitComment"
       >
         发表
       </div>
@@ -122,7 +128,9 @@ export default {
     return {
       headName: '帖子详情',
       hasSupport: false,
+      textareaOpening: false,
       commentText: '',
+      textareaText: '',
       commentList: [],
       cid: -1,
       hasMoreComment: false,
@@ -205,17 +213,26 @@ export default {
         })
       }
     },
+    openTextareaBox () {
+      this.textareaOpening = true
+    },
     submitComment() {
       if(this.commentText.trim().length === 0) {
+        Toast('评论内容不能为空')
+        return
+      }
+    },
+    textareaSubmitComment () {
+      if(this.textareaText.trim().length === 0) {
         Toast('评论内容不能为空')
         return
       }
       let commentObj = {
         sid: this.sid,
         tid: this.item.tid,
-        content: this.commentText
+        content: this.textareaText
       }
-      this.commentText = ''
+      this.textareaText = ''
       api.NewComment(commentObj).then(res => {
         if(res.result === 0) {
           Toast({
@@ -252,7 +269,7 @@ export default {
     }
     .post-detail-container {
       // margin-top: 50px;
-      height: calc(100% - 90px);
+      height: calc(100% - 40px);
       box-sizing: border-box;
       overflow: auto;
       .item-box {
@@ -274,7 +291,7 @@ export default {
           .item-post-info {
             font-size: 16px;
             margin-left: 6px;
-            flex: 1;
+            width: 245px;
             .item-post-name {
               font-size: 14px;
             }
@@ -284,12 +301,18 @@ export default {
             }
           }
           .item-support-box {
-            width: 24px;
-            height: 24px;
-            padding: 6px 14px 0 0;
+            display: flex;
+            justify-content: flex-end;
+            width: 63px;
             .item-support-img {
-              width: 100%;
-              height: 100%;
+              width: 20px;
+              height: 20px;
+            }
+            .item-support-num {
+              margin-left: 5px;
+              margin-right: 3px;
+              margin-top: 3px;
+              color: #888;
             }
           }
         }
@@ -299,13 +322,13 @@ export default {
           flex-direction: column;
           padding: 0 20px 10px 42px;
           .item-content {
-            margin-bottom: 6px;
+            margin-bottom: 3px;
             font-size: 16px;
           }
           .item-comment-box {
             .comment-less-box {
               .comment-less-for-box {
-                padding: 2px 0;
+                padding: 3px 0;
                 .comment-item {
                   .comment-name {
                     color: #4299e5;
@@ -313,10 +336,10 @@ export default {
                   .comment-content {
                     padding: 0 12px 0 6px;
                   }
-                  .comment-time {
-                    color: #888;
-                    white-space: nowrap;
-                  }
+                }
+                .comment-time {
+                  color: #888;
+                  white-space: nowrap;
                 }
               }
             }
@@ -352,7 +375,7 @@ export default {
       width: 100%;
       height: 40px;
       line-height: 40px;
-      padding: 0 10px;
+      padding-left:10px;
       box-sizing: border-box;
       display: flex;
       .comment-input {
@@ -367,9 +390,45 @@ export default {
       }
       .comment-submit {
         font-size: 16px;
-        width: 40px;
-        height: 100%;
+        width: 50px;
+        height: 102%;
+        border-radius: 2px;
         text-align: center;
+        background-color: #5676FF;
+        color: #fff;
+      }
+    }
+    .post-comment-textarea-container {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      border-top: 1px solid #bbb;
+      width: 100%;
+      height: 200px;
+      padding: 0 10px;
+      box-sizing: border-box;
+      textarea {
+        outline: none;
+        border-width: 0;
+      }
+      .post-textarea {
+        padding: 10px;
+        width: calc(100% - 20px);
+        height: calc(100% - 60px);
+        font-size: 14px;
+        outline: none;
+        resize: none;
+      }
+      .textarea-comment-submit {
+        float: right;
+        font-size: 16px;
+        width: 50px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 2px;
+        text-align: center;
+        background-color: #5676FF;
+        color: #fff;
       }
     }
   }
