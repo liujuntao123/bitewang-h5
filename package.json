@@ -15,7 +15,7 @@
     "draggable-polyfill": "^1.1.1",
     "mint-ui": "^2.2.13",
     "mobile-drag-drop": "^2.3.0-rc.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "vue": "^2.6.10",
     "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.0.3",
